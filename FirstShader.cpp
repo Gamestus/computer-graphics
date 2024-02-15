@@ -114,7 +114,7 @@ int main()
 	ID3D11DeviceContext* context;
 	IDXGISwapChain* swapChain;
 
-	auto res = D3D11CreateDeviceAndSwapChain(
+	auto res = D3D11CreateDeviceAndSwapChain( //device
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
 		nullptr,
@@ -134,7 +134,7 @@ int main()
 	}
 
 	ID3D11Texture2D* backTex;
-	ID3D11RenderTargetView* rtv;
+	ID3D11RenderTargetView* rtv; // render target view
 	res = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backTex);	// __uuidof(ID3D11Texture2D)
 	res = device->CreateRenderTargetView(backTex, nullptr, &rtv);
 
@@ -145,10 +145,12 @@ int main()
 		nullptr /*macros*/,
 		nullptr /*include*/,
 		"VSMain",
-		"vs_5_0",
-		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
-		0,
-		&vertexBC,
+		"vs_5_0", //assembler version for hlsl vertex shader vs_5_0
+		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, //flags can be defined with | separation
+		// D3DCOMPILE_PACK_MATRIX_ROW_MAJOR transposes matrix, can be useful
+		0, //flags2 effects (pretty old)
+		&vertexBC,//byte code for shader to compile into
+		//later byte code will be sent to GPU
 		&errorVertexCode);
 
 	if (FAILED(res)) {
@@ -167,6 +169,7 @@ int main()
 		return 0;
 	}
 
+	// Macros where: TEST == 1, TCOLOR == green
 	D3D_SHADER_MACRO Shader_Macros[] = { "TEST", "1", "TCOLOR", "float4(0.0f, 1.0f, 0.0f, 1.0f)", nullptr, nullptr };
 
 	ID3DBlob* pixelBC;
@@ -185,13 +188,15 @@ int main()
 		pixelBC->GetBufferSize(),
 		nullptr, &pixelShader);
 
+
+	//Create Input Layout fr IA Stage
 	D3D11_INPUT_ELEMENT_DESC inputElements[] = {
 		D3D11_INPUT_ELEMENT_DESC {
 			"POSITION",
 			0,
 			DXGI_FORMAT_R32G32B32A32_FLOAT,
-			0,
-			0,
+			0, // Input slot values 0-15 defined in D3D11.h
+			0, // Aligned byte offset from start of the vertex
 			D3D11_INPUT_PER_VERTEX_DATA,
 			0},
 		D3D11_INPUT_ELEMENT_DESC {
@@ -219,7 +224,7 @@ int main()
 		DirectX::XMFLOAT4(-0.5f, 0.5f, 0.5f, 1.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
 	};
 
-
+	//Create vertex and index buffer
 	D3D11_BUFFER_DESC vertexBufDesc = {};
 	vertexBufDesc.Usage = D3D11_USAGE_DEFAULT;
 	vertexBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
