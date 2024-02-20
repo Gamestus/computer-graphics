@@ -3,3 +3,6 @@
 GameComponent::GameComponent()
 {
 }
+void GameComponent::Draw()
+{
+}

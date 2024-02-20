@@ -1,4 +1,5 @@
 #include "TriangleComponent.h"
+#include <chrono>
 
 TriangleComponent::TriangleComponent() {
 	Initialize();
@@ -7,7 +8,7 @@ TriangleComponent::TriangleComponent() {
 void TriangleComponent::Initialize() {
 	game = Game::Instance;
 
-	ID3DBlob* vertexBC = nullptr;
+
 	ID3DBlob* errorVertexCode = nullptr;
 	auto res = D3DCompileFromFile(L"./Shaders/Shader.hlsl",
 		nullptr /*macros*/,
@@ -22,9 +23,17 @@ void TriangleComponent::Initialize() {
 
 	D3D_SHADER_MACRO Shader_Macros[] = { "TEST", "1", "TCOLOR", "float4(0.0f, 1.0f, 0.0f, 1.0f)", nullptr, nullptr };
 
-	ID3DBlob* pixelBC;
+
 	ID3DBlob* errorPixelCode;
-	res = D3DCompileFromFile(L"./Shaders/Shader.hlsl", Shader_Macros /*macros*/, nullptr /*include*/, "PSMain", "ps_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &pixelBC, &errorPixelCode);
+	res = D3DCompileFromFile(L"./Shaders/Shader.hlsl",
+		Shader_Macros /*macros*/,
+		nullptr /*include*/,
+		"PSMain",
+		"ps_5_0",
+		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
+		0,
+		&pixelBC,
+		&errorPixelCode);
 
 
 	game->WrlDevice->CreateVertexShader(
@@ -88,7 +97,7 @@ void TriangleComponent::Initialize() {
 	vertexData.SysMemPitch = 0;
 	vertexData.SysMemSlicePitch = 0;
 
-	ID3D11Buffer* vb;
+
 	game->WrlDevice->CreateBuffer(&vertexBufDesc, &vertexData, &vb);
 
 	//create index buffer
@@ -106,7 +115,7 @@ void TriangleComponent::Initialize() {
 	indexData.SysMemPitch = 0;
 	indexData.SysMemSlicePitch = 0;
 
-	ID3D11Buffer* ib;
+
 	game->WrlDevice->CreateBuffer(&indexBufDesc, &indexData, &ib);
 
 	//setup IA
@@ -118,9 +127,7 @@ void TriangleComponent::Initialize() {
 	game->DeviceContext->IASetIndexBuffer(ib, DXGI_FORMAT_R32_UINT, 0);
 	game->DeviceContext->IASetVertexBuffers(0, 1, &vb, strides, offsets);
 
-	//set shaders
-	game->DeviceContext->VSSetShader(vertexShader, nullptr, 0);
-	game->DeviceContext->PSSetShader(pixelShader, nullptr, 0);
+
 
 	//rasterizer
 
@@ -129,27 +136,67 @@ void TriangleComponent::Initialize() {
 	rastDesc.FillMode = D3D11_FILL_SOLID;
 	res = game->WrlDevice->CreateRasterizerState(&rastDesc, &rastState);
 
+
+
+	
+}
+
+void TriangleComponent::Draw() {
+	UINT strides[] = { 32 };
+	UINT offsets[] = { 0 };
+	//each frame too?
+	game->DeviceContext->ClearState();
+
 	game->DeviceContext->RSSetState(rastState);
 
 	//viewport (TODO)
 	D3D11_VIEWPORT viewport = {};
-	viewport.Width = static_cast<float>(800);
-	viewport.Height = static_cast<float>(600);
+	viewport.Width = static_cast<float>(game->Display->ClientWidth);
+	viewport.Height = static_cast<float>(game->Display->ClientHeight);
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
 	viewport.MinDepth = 0;
 	viewport.MaxDepth = 1.0f;
 
+	//??
+	game->DeviceContext->RSSetViewports(1, &viewport);
+
+	game->DeviceContext->IASetInputLayout(layout);
+	game->DeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	game->DeviceContext->IASetIndexBuffer(ib, DXGI_FORMAT_R32_UINT, 0);
+	game->DeviceContext->IASetVertexBuffers(0, 1, &vb, strides, offsets);
+	//set shaders
+	game->DeviceContext->VSSetShader(vertexShader, nullptr, 0);
+	game->DeviceContext->PSSetShader(pixelShader, nullptr, 0);
+
+	auto	curTime = std::chrono::steady_clock::now();
+	float	deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(curTime - PrevTime).count() / 1000000.0f;
+	PrevTime = curTime;
+
+	totalTime += deltaTime;
+	frameCount++;
+	if (totalTime > 1.0f) {
+		float fps = frameCount / totalTime;
+
+		totalTime -= 1.0f;
+
+		WCHAR text[256];
+		swprintf_s(text, TEXT("FPS: %f"), fps);
+		//SetWindowText(hWnd, text);
+
+		frameCount = 0;
+	}
 	//set backbuffer for output (TODO should be used each frame)
 	game->DeviceContext->OMSetRenderTargets(1, &game->RenderView, nullptr);
 
 	game->DeviceContext->OMSetRenderTargets(1, &game->RenderView, nullptr);
 
-	float color[] = { 1.0f, 0.1f, 0.1f, 1.0f };
+	float color[] = { totalTime, 0.1f, 0.1f, 1.0f };
 	game->DeviceContext->ClearRenderTargetView(game->RenderView, color);
 
 	game->DeviceContext->DrawIndexed(6, 0, 0);
 
 	game->DeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
-	
+
+	game->SwapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0);
 }

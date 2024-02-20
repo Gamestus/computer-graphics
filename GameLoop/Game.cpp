@@ -97,13 +97,22 @@ int Game::Run() {
 		if (const auto ecode = processMessages()) {
 			return *ecode;
 		}
+		components.at(0).Draw();
 	}
 
 }
 
 void Game::CreateBackBuffer() {
-	SwapDevice = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&BackBuffer);
-	SwapDevice = WrlDevice->CreateRenderTargetView(BackBuffer, nullptr, &RenderView);
+	auto res = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&BackBuffer);
+	if (FAILED(res))
+	{
+		OutputDebugStringW(L"GetBuffer! Oh, that was unexpected!");
+	}
+	res = WrlDevice->CreateRenderTargetView(BackBuffer, nullptr, &RenderView);
+	if (FAILED(res))
+	{
+		OutputDebugStringW(L"CreateRenderTargetView! Oh, that was unexpected!");
+	}
 }
 
 void Game::CreateSwapChain() {
@@ -128,7 +137,7 @@ void Game::CreateSwapChain() {
 	swapDesc.SampleDesc.Quality = 0;
 
 
-	SwapDevice = D3D11CreateDeviceAndSwapChain(
+	auto res = D3D11CreateDeviceAndSwapChain(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
 		nullptr,
@@ -141,4 +150,8 @@ void Game::CreateSwapChain() {
 		&WrlDevice,
 		nullptr,
 		&DeviceContext);
+	if (FAILED(res))
+	{
+		OutputDebugStringW(L"D3D11CreateDeviceAndSwapChain! Oh, that was unexpected!");
+	}
 }

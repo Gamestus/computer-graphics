@@ -8,8 +8,8 @@ public:
 	Game* game;
 
 	GameComponent();
+	void Draw();
 	/*virtual void DestroyResources();
-	virtual void Draw();
 	void Initialize();
 	virtual void Reload();
 	virtual void Update(); */

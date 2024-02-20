@@ -16,7 +16,7 @@
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "dxguid.lib")
 
-class GameComponent;
+class TriangleComponent;
 
 class Game
 {
@@ -27,7 +27,7 @@ public:
 	ID3D11RenderTargetView* RenderView;
 	ID3D11Texture2D* BackBuffer;
 	ID3D11DeviceContext* DeviceContext;
-	std::vector<GameComponent> components;
+	std::vector<TriangleComponent> components;
 
 	int DebugAnnotation;
 	int Name;
