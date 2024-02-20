@@ -45,6 +45,7 @@ private:
 	void DoFrame();
 	void CreateBackBuffer();
 	void CreateSwapChain();
+	void CompileShaders();
 
 protected:
 	void Initialize(HINSTANCE hInstanceNew);
