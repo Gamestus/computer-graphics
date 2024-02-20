@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "TriangleComponent.h"
 
 Game* Game::Instance = nullptr;
 
@@ -62,7 +63,8 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	Display = new DisplayWin32(hInstanceNew, MessageHandler);
 	CreateSwapChain();
 	CreateBackBuffer();
-	CompileShaders();
+
+	components.push_back(TriangleComponent());
 }
 
 Game::~Game() {
@@ -139,62 +141,4 @@ void Game::CreateSwapChain() {
 		&WrlDevice,
 		nullptr,
 		&DeviceContext);
-}
-
-void Game::CompileShaders() {
-	ID3DBlob* vertexBC = nullptr;
-	ID3DBlob* errorVertexCode = nullptr;
-	SwapDevice = D3DCompileFromFile(L"./Shaders/Shader.hlsl",
-		nullptr /*macros*/,
-		nullptr /*include*/,
-		"VSMain",
-		"vs_5_0",
-		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
-		0,
-		&vertexBC,
-		&errorVertexCode);
-	
-	D3D_SHADER_MACRO Shader_Macros[] = { "TEST", "1", "TCOLOR", "float4(0.0f, 1.0f, 0.0f, 1.0f)", nullptr, nullptr };
-
-	ID3DBlob* pixelBC;
-	ID3DBlob* errorPixelCode;
-	SwapDevice = D3DCompileFromFile(L"./Shaders/Shader.hlsl",
-		Shader_Macros /*macros*/, nullptr /*include*/,
-		"PSMain",
-		"ps_5_0",
-		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
-		0,
-		&pixelBC,
-		&errorPixelCode);
-
-	ID3D11VertexShader* vertexShader;
-	ID3D11PixelShader* pixelShader;
-	WrlDevice->CreateVertexShader(
-		vertexBC->GetBufferPointer(),
-		vertexBC->GetBufferSize(),
-		nullptr, &vertexShader);
-
-	WrlDevice->CreatePixelShader(
-		pixelBC->GetBufferPointer(),
-		pixelBC->GetBufferSize(),
-		nullptr, &pixelShader);
-
-	D3D11_INPUT_ELEMENT_DESC inputElements[] = {
-		D3D11_INPUT_ELEMENT_DESC {
-			"POSITION",
-			0,
-			DXGI_FORMAT_R32G32B32A32_FLOAT,
-			0,
-			0,
-			D3D11_INPUT_PER_VERTEX_DATA,
-			0},
-		D3D11_INPUT_ELEMENT_DESC {
-			"COLOR",
-			0,
-			DXGI_FORMAT_R32G32B32A32_FLOAT,
-			0,
-			D3D11_APPEND_ALIGNED_ELEMENT,
-			D3D11_INPUT_PER_VERTEX_DATA,
-			0}
-	};
 }
