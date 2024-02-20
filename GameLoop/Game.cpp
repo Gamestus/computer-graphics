@@ -22,6 +22,24 @@ LRESULT CALLBACK MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM 
 		Game::Instance->Device->RemovePressedKey(static_cast<unsigned int>(wparam));
 		break;
 	}
+	case WM_MOUSEMOVE:
+	{
+		const POINTS pt = MAKEPOINTS(lparam);
+		Game::Instance->Device->MouseMove(pt);
+		break;
+	}
+	case WM_LBUTTONDOWN:
+	{
+		const POINTS pt = MAKEPOINTS(lparam);
+		Game::Instance->Device->MouseLeftClick(pt);
+		break;
+	}
+	case WM_RBUTTONDOWN:
+	{
+		const POINTS pt = MAKEPOINTS(lparam);
+		Game::Instance->Device->MouseRightClick(pt);
+		break;
+	}
 	case WM_CLOSE:
 	{
 		PostQuitMessage(0);

@@ -29,3 +29,19 @@ void InputDevice::OnKeyUp(unsigned char keycode) {
 	wsprintf(buffer, L"Key is up: %d\n", static_cast<unsigned int>(keycode));
 	OutputDebugStringW(buffer);
 }
+
+void InputDevice::MouseRightClick(POINTS pt) {
+	wchar_t buffer[256];
+	wsprintf(buffer, L"Right mouse at: (%d, %d)\n", pt.x, pt.y);
+	OutputDebugStringW(buffer);
+}
+
+void InputDevice::MouseLeftClick(POINTS pt) {
+	wchar_t buffer[256];
+	wsprintf(buffer, L"Left mouse at: (%d, %d)\n", pt.x, pt.y);
+	OutputDebugStringW(buffer);
+}
+
+void InputDevice::MouseMove(POINTS pt) {
+	MousePosition = pt;
+}
