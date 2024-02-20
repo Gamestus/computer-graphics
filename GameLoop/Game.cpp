@@ -60,6 +60,7 @@ Game::Game(HINSTANCE hInstanceNew) {
 void Game::Initialize(HINSTANCE hInstanceNew) {
 	Device = new InputDevice();
 	Display = new DisplayWin32(hInstanceNew, MessageHandler);
+	CreateSwapChain();
 }
 
 Game::~Game() {
@@ -94,4 +95,45 @@ int Game::Run() {
 		}
 	}
 
+}
+
+void Game::CreateBackBuffer() {
+
+}
+
+void Game::CreateSwapChain() {
+
+	D3D_FEATURE_LEVEL featureLevel[] = { D3D_FEATURE_LEVEL_11_1 };
+
+	DXGI_SWAP_CHAIN_DESC swapDesc = {};
+	swapDesc.BufferCount = 2;
+	swapDesc.BufferDesc.Width = Display->ClientWidth;
+	swapDesc.BufferDesc.Height = Display->ClientHeight;
+	swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapDesc.BufferDesc.RefreshRate.Numerator = 60;
+	swapDesc.BufferDesc.RefreshRate.Denominator = 1;
+	swapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	swapDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapDesc.OutputWindow = Display->hWnd;
+	swapDesc.Windowed = true;
+	swapDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+	swapDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+	swapDesc.SampleDesc.Count = 1;
+	swapDesc.SampleDesc.Quality = 0;
+
+
+	swapDevice = D3D11CreateDeviceAndSwapChain(
+		nullptr,
+		D3D_DRIVER_TYPE_HARDWARE,
+		nullptr,
+		D3D11_CREATE_DEVICE_DEBUG,
+		featureLevel,
+		1,
+		D3D11_SDK_VERSION,
+		&swapDesc,
+		&swapChain,
+		&wrlDevice,
+		nullptr,
+		&deviceContext);
 }
