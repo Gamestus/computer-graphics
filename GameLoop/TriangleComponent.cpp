@@ -1,7 +1,14 @@
 #include "TriangleComponent.h"
 #include <chrono>
 
-TriangleComponent::TriangleComponent() {
+TriangleComponent::TriangleComponent(DirectX::XMFLOAT4 newPoints[6]) {
+
+	points[0] = newPoints[0];
+	points[1] = newPoints[1];
+	points[2] = newPoints[2];
+	points[3] = newPoints[3];
+	points[4] = newPoints[4];
+	points[5] = newPoints[5];
 	Initialize();
 }
 
@@ -17,7 +24,7 @@ void TriangleComponent::Initialize() {
 		"vs_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
 		0,
-		&vertexBC,
+		&vertexShaderByteCode,
 		&errorVertexCode);
 
 
@@ -32,18 +39,18 @@ void TriangleComponent::Initialize() {
 		"ps_5_0",
 		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
 		0,
-		&pixelBC,
+		&pixelShaderByteCode,
 		&errorPixelCode);
 
 
 	game->WrlDevice->CreateVertexShader(
-		vertexBC->GetBufferPointer(),
-		vertexBC->GetBufferSize(),
+		vertexShaderByteCode->GetBufferPointer(),
+		vertexShaderByteCode->GetBufferSize(),
 		nullptr, &vertexShader);
 
 	game->WrlDevice->CreatePixelShader(
-		pixelBC->GetBufferPointer(),
-		pixelBC->GetBufferSize(),
+		pixelShaderByteCode->GetBufferPointer(),
+		pixelShaderByteCode->GetBufferSize(),
 		nullptr, &pixelShader);
 
 	D3D11_INPUT_ELEMENT_DESC inputElements[] = {
@@ -69,19 +76,11 @@ void TriangleComponent::Initialize() {
 	game->WrlDevice->CreateInputLayout(
 		inputElements,
 		2,
-		vertexBC->GetBufferPointer(),
-		vertexBC->GetBufferSize(),
+		vertexShaderByteCode->GetBufferPointer(),
+		vertexShaderByteCode->GetBufferSize(),
 		&layout);
 
-	//TD set points
-	points[0] = DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
-	points[1] = DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
-	points[2] = DirectX::XMFLOAT4(-0.5f, -0.5f, 0.5f, 1.0f);
-	points[3] = DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
-	points[4] = DirectX::XMFLOAT4(0.5f, -0.5f, 0.5f, 1.0f);
-	points[5] = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
-	points[6] = DirectX::XMFLOAT4(-0.5f, 0.5f, 0.5f, 1.0f);
-	points[7] = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+
 
 	//create vertex buffer
 	D3D11_BUFFER_DESC vertexBufDesc = {};
@@ -98,10 +97,10 @@ void TriangleComponent::Initialize() {
 	vertexData.SysMemSlicePitch = 0;
 
 
-	game->WrlDevice->CreateBuffer(&vertexBufDesc, &vertexData, &vb);
+	game->WrlDevice->CreateBuffer(&vertexBufDesc, &vertexData, &vertexBuffer);
 
 	//create index buffer
-	int indeces[] = { 0,1,2, 1,0,3 };
+	int indeces[] = { 0,1,2};
 	D3D11_BUFFER_DESC indexBufDesc = {};
 	indexBufDesc.Usage = D3D11_USAGE_DEFAULT;
 	indexBufDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -116,7 +115,7 @@ void TriangleComponent::Initialize() {
 	indexData.SysMemSlicePitch = 0;
 
 
-	game->WrlDevice->CreateBuffer(&indexBufDesc, &indexData, &ib);
+	game->WrlDevice->CreateBuffer(&indexBufDesc, &indexData, &indexBuffer);
 
 	//setup IA
 	UINT strides[] = { 32 };
@@ -124,8 +123,8 @@ void TriangleComponent::Initialize() {
 
 	game->DeviceContext->IASetInputLayout(layout);
 	game->DeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	game->DeviceContext->IASetIndexBuffer(ib, DXGI_FORMAT_R32_UINT, 0);
-	game->DeviceContext->IASetVertexBuffers(0, 1, &vb, strides, offsets);
+	game->DeviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	game->DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, strides, offsets);
 
 
 
@@ -144,59 +143,28 @@ void TriangleComponent::Initialize() {
 void TriangleComponent::Draw() {
 	UINT strides[] = { 32 };
 	UINT offsets[] = { 0 };
-	//each frame too?
-	game->DeviceContext->ClearState();
 
 	game->DeviceContext->RSSetState(rastState);
 
-	//viewport (TODO)
-	D3D11_VIEWPORT viewport = {};
-	viewport.Width = static_cast<float>(game->Display->ClientWidth);
-	viewport.Height = static_cast<float>(game->Display->ClientHeight);
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	viewport.MinDepth = 0;
-	viewport.MaxDepth = 1.0f;
-
-	//??
-	game->DeviceContext->RSSetViewports(1, &viewport);
 
 	game->DeviceContext->IASetInputLayout(layout);
 	game->DeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	game->DeviceContext->IASetIndexBuffer(ib, DXGI_FORMAT_R32_UINT, 0);
-	game->DeviceContext->IASetVertexBuffers(0, 1, &vb, strides, offsets);
+	game->DeviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	game->DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, strides, offsets);
 	//set shaders
 	game->DeviceContext->VSSetShader(vertexShader, nullptr, 0);
 	game->DeviceContext->PSSetShader(pixelShader, nullptr, 0);
 
-	auto	curTime = std::chrono::steady_clock::now();
-	float	deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(curTime - PrevTime).count() / 1000000.0f;
-	PrevTime = curTime;
-
-	totalTime += deltaTime;
-	frameCount++;
-	if (totalTime > 1.0f) {
-		float fps = frameCount / totalTime;
-
-		totalTime -= 1.0f;
-
-		WCHAR text[256];
-		swprintf_s(text, TEXT("FPS: %f"), fps);
-		//SetWindowText(hWnd, text);
-
-		frameCount = 0;
-	}
-	//set backbuffer for output (TODO should be used each frame)
+	//set backbuffer for output
 	game->DeviceContext->OMSetRenderTargets(1, &game->RenderView, nullptr);
 
 	game->DeviceContext->OMSetRenderTargets(1, &game->RenderView, nullptr);
 
-	float color[] = { totalTime, 0.1f, 0.1f, 1.0f };
-	game->DeviceContext->ClearRenderTargetView(game->RenderView, color);
+	
 
-	game->DeviceContext->DrawIndexed(6, 0, 0);
+	game->DeviceContext->DrawIndexed(3, 0, 0);
 
 	game->DeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
 
-	game->SwapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0);
+
 }

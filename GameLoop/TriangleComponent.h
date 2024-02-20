@@ -8,7 +8,7 @@ class TriangleComponent :
     public GameComponent
 {
 public:
-	TriangleComponent();
+	TriangleComponent(DirectX::XMFLOAT4 points[3]);
 	void Initialize();
 	void Draw();
 	/*void DestroyResources();
@@ -19,14 +19,18 @@ public:
 	unsigned int frameCount = 0;
 
 private:
-	ID3D11Buffer* vb;
-	ID3D11Buffer* ib;
-	ID3DBlob* vertexBC = nullptr;
-	ID3DBlob* pixelBC;
 	ID3D11InputLayout* layout;
-    DirectX::XMFLOAT4 points[8];
-    ID3D11VertexShader* vertexShader;
+
     ID3D11PixelShader* pixelShader;
+	ID3DBlob* pixelShaderByteCode = nullptr;
+
+    ID3D11VertexShader* vertexShader;
+	ID3DBlob* vertexShaderByteCode = nullptr;
+
+	ID3D11Buffer* vertexBuffer;
+	ID3D11Buffer* indexBuffer;
+
+    DirectX::XMFLOAT4 points[6];
 	ID3D11RasterizerState* rastState;
 };
 

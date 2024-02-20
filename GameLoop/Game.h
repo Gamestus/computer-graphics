@@ -46,14 +46,16 @@ public:
 	int Run();
 
 private:
+	D3D11_VIEWPORT viewport = {};
 	GameTimer timer;
 	std::optional<int> processMessages();
+
 	void DoFrame();
 	void CreateBackBuffer();
 	void CreateSwapChain();
-	void CompileShaders();
 	void CreateVertexIndexBuffers();
-
+	void UpdateViewport();
+	void Draw();
 protected:
 	void Initialize(HINSTANCE hInstanceNew);
 };

@@ -63,8 +63,27 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	Display = new DisplayWin32(hInstanceNew, MessageHandler);
 	CreateSwapChain();
 	CreateBackBuffer();
+	UpdateViewport();
 
-	components.push_back(TriangleComponent());
+	DirectX::XMFLOAT4 points1[6] = {
+		DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f),
+		DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f),
+		DirectX::XMFLOAT4(-0.5f, -0.5f, 0.5f, 1.0f),
+		DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f),
+		DirectX::XMFLOAT4(0.5f, -0.5f, 0.5f, 1.0f),
+		DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f),
+	};
+	components.push_back(TriangleComponent(points1));
+
+	DirectX::XMFLOAT4 points2[6] = {
+		DirectX::XMFLOAT4(-0.5f, -0.5f, 0.5f, 1.0f),
+		DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f),
+		DirectX::XMFLOAT4(0.5f, -0.5f, 0.5f, 1.0f),
+		DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f),
+		DirectX::XMFLOAT4(-0.5f, 0.5f, 0.5f, 1.0f),
+		DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+	};
+	components.push_back(TriangleComponent(points2));
 }
 
 Game::~Game() {
@@ -97,9 +116,35 @@ int Game::Run() {
 		if (const auto ecode = processMessages()) {
 			return *ecode;
 		}
-		components.at(0).Draw();
+		Draw();
+		
 	}
 
+}
+
+void Game::UpdateViewport() {
+
+	viewport.Width = static_cast<float>(Display->ClientWidth);
+	viewport.Height = static_cast<float>(Display->ClientHeight);
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.MinDepth = 0;
+	viewport.MaxDepth = 1.0f;
+}
+
+void Game::Draw() {
+
+	DeviceContext->ClearState();
+
+	DeviceContext->RSSetViewports(1, &viewport);
+
+	float color[] = { 0.3f, 0.3f, 0.3f, 1.0f };
+	DeviceContext->ClearRenderTargetView(RenderView, color);
+
+	components.at(0).Draw();
+	components.at(1).Draw();
+
+	SwapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0);
 }
 
 void Game::CreateBackBuffer() {
