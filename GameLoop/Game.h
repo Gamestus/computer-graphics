@@ -1,6 +1,8 @@
 #pragma once
 #include "DisplayWin32.h"
 #include "InputDevice.h"
+#include <optional>
+
 class Game
 {
 public:
@@ -22,6 +24,11 @@ public:
 	Game(HINSTANCE hInstanceNew);
 	~Game();
 
+	int Run();
+
+private:
+	std::optional<int> processMessages();
+	void DoFrame();
 protected:
 	void Initialize(HINSTANCE hInstanceNew);
 };

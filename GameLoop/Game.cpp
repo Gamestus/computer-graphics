@@ -66,3 +66,32 @@ Game::~Game() {
 	delete[] Display;
 	delete[] Device;
 }
+
+std::optional<int> Game::processMessages() {
+
+
+	MSG msg = {};
+	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+		
+		if (msg.message == WM_QUIT){
+			return msg.wParam;
+		}
+		
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+
+	}
+
+	return {};
+}
+
+int Game::Run() {
+	while (true)
+	{
+
+		if (const auto ecode = processMessages()) {
+			return *ecode;
+		}
+	}
+
+}
