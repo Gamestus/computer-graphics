@@ -98,7 +98,8 @@ int Game::Run() {
 }
 
 void Game::CreateBackBuffer() {
-
+	SwapDevice = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&BackBuffer);
+	SwapDevice = WrlDevice->CreateRenderTargetView(BackBuffer, nullptr, &RenderView);
 }
 
 void Game::CreateSwapChain() {
@@ -123,7 +124,7 @@ void Game::CreateSwapChain() {
 	swapDesc.SampleDesc.Quality = 0;
 
 
-	swapDevice = D3D11CreateDeviceAndSwapChain(
+	SwapDevice = D3D11CreateDeviceAndSwapChain(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
 		nullptr,
@@ -132,8 +133,8 @@ void Game::CreateSwapChain() {
 		1,
 		D3D11_SDK_VERSION,
 		&swapDesc,
-		&swapChain,
-		&wrlDevice,
+		&SwapChain,
+		&WrlDevice,
 		nullptr,
-		&deviceContext);
+		&DeviceContext);
 }

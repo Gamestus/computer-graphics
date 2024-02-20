@@ -20,17 +20,19 @@ public:
 	static Game* Instance;
 	DisplayWin32* Display;
 	InputDevice* Device;
-	int backBuffer;
-	int Context;
+	ID3D11RenderTargetView* RenderView;
+	ID3D11Texture2D* BackBuffer;
+	ID3D11DeviceContext* DeviceContext;
 	int DebugAnnotation;
 	int Name;
 	int PrevTime;
 	int RenderSRV;
-	int RenderView;
 	int ScreenResized;
 	int StartTime;
-	int SwapChain;
 	int TotalTime;
+	IDXGISwapChain* SwapChain;
+	HRESULT SwapDevice;
+	Microsoft::WRL::ComPtr<ID3D11Device> WrlDevice;
 
 	Game(HINSTANCE hInstanceNew);
 	~Game();
@@ -44,10 +46,6 @@ private:
 	void CreateBackBuffer();
 	void CreateSwapChain();
 
-	Microsoft::WRL::ComPtr<ID3D11Device> wrlDevice;
-	ID3D11DeviceContext* deviceContext;
-	IDXGISwapChain* swapChain;
-	HRESULT swapDevice;
 protected:
 	void Initialize(HINSTANCE hInstanceNew);
 };
