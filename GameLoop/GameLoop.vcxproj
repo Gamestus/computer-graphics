@@ -139,12 +139,14 @@
   <ItemGroup>
     <ClInclude Include="DisplayWin32.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameTimer.h" />
     <ClInclude Include="Keys.h" />
     <ClInclude Include="InputDevice.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DisplayWin32.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="InputDevice.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>

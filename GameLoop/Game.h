@@ -1,6 +1,7 @@
 #pragma once
 #include "DisplayWin32.h"
 #include "InputDevice.h"
+#include "GameTimer.h"
 #include <optional>
 
 class Game
@@ -29,6 +30,8 @@ public:
 private:
 	std::optional<int> processMessages();
 	void DoFrame();
+	GameTimer timer;
+
 protected:
 	void Initialize(HINSTANCE hInstanceNew);
 };
