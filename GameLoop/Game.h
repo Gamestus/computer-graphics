@@ -1,13 +1,15 @@
 #pragma once
 #include "DisplayWin32.h"
+#include "InputDevice.h"
 class Game
 {
 public:
-	DisplayWin32 *Device;
+	static Game* Instance;
+	DisplayWin32* Display;
+	InputDevice* Device;
 	int backBuffer;
 	int Context;
 	int DebugAnnotation;
-	int Instance;
 	int Name;
 	int PrevTime;
 	int RenderSRV;
