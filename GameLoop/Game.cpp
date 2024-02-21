@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "TriangleComponent.h"
+#include "Strsafe.h"
 
 Game* Game::Instance = nullptr;
 
@@ -116,6 +117,8 @@ int Game::Run() {
 		if (const auto ecode = processMessages()) {
 			return *ecode;
 		}
+
+		Update(timer.Mark());
 		Draw();
 		
 	}
@@ -132,6 +135,12 @@ void Game::UpdateViewport() {
 	viewport.MaxDepth = 1.0f;
 }
 
+void Game::Update(float delta) {
+	TCHAR buffer[24];
+	StringCchPrintf(buffer, sizeof(buffer) / sizeof(TCHAR), L"%f\n", delta);
+	OutputDebugStringW(buffer);
+}
+
 void Game::Draw() {
 
 	DeviceContext->ClearState();
@@ -140,6 +149,8 @@ void Game::Draw() {
 
 	float color[] = { 0.3f, 0.3f, 0.3f, 1.0f };
 	DeviceContext->ClearRenderTargetView(RenderView, color);
+
+	
 
 	for (auto& component : components)
 	{

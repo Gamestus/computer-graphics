@@ -28,6 +28,9 @@ public:
 	ID3D11Texture2D* BackBuffer;
 	ID3D11DeviceContext* DeviceContext;
 	std::vector<TriangleComponent> components;
+	IDXGISwapChain* SwapChain;
+	HRESULT SwapDevice;
+	Microsoft::WRL::ComPtr<ID3D11Device> WrlDevice;
 
 	int DebugAnnotation;
 	int Name;
@@ -36,9 +39,6 @@ public:
 	int ScreenResized;
 	int StartTime;
 	int TotalTime;
-	IDXGISwapChain* SwapChain;
-	HRESULT SwapDevice;
-	Microsoft::WRL::ComPtr<ID3D11Device> WrlDevice;
 
 	Game(HINSTANCE hInstanceNew);
 	~Game();
@@ -50,7 +50,7 @@ private:
 	GameTimer timer;
 	std::optional<int> processMessages();
 
-	void DoFrame();
+	void Update(float delta);
 	void CreateBackBuffer();
 	void CreateSwapChain();
 	void CreateVertexIndexBuffers();
