@@ -117,17 +117,6 @@ void TriangleComponent::Initialize() {
 
 	game->WrlDevice->CreateBuffer(&indexBufDesc, &indexData, &indexBuffer);
 
-	//setup IA
-	UINT strides[] = { 32 };
-	UINT offsets[] = { 0 };
-
-	game->DeviceContext->IASetInputLayout(layout);
-	game->DeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	game->DeviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	game->DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, strides, offsets);
-
-
-
 	//rasterizer
 
 	CD3D11_RASTERIZER_DESC rastDesc = {};
@@ -147,6 +136,7 @@ void TriangleComponent::Draw() {
 	game->DeviceContext->RSSetState(rastState);
 
 
+	//setup IA
 	game->DeviceContext->IASetInputLayout(layout);
 	game->DeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	game->DeviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
