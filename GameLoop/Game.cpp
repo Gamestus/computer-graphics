@@ -149,7 +149,7 @@ void Game::Draw() {
 
 	float color[] = { 0.3f, 0.3f, 0.3f, 1.0f };
 	DeviceContext->ClearRenderTargetView(RenderView, color);
-
+	DeviceContext->OMSetRenderTargets(1, &RenderView, nullptr);
 	
 
 	for (auto& component : components)
