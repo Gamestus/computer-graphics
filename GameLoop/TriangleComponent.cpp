@@ -144,17 +144,10 @@ void TriangleComponent::Draw() {
 	//set shaders
 	game->DeviceContext->VSSetShader(vertexShader, nullptr, 0);
 	game->DeviceContext->PSSetShader(pixelShader, nullptr, 0);
-
-	//set backbuffer for output
-	game->DeviceContext->OMSetRenderTargets(1, &game->RenderView, nullptr);
-
-	game->DeviceContext->OMSetRenderTargets(1, &game->RenderView, nullptr);
-
 	
 
 	game->DeviceContext->DrawIndexed(3, 0, 0);
 
-	game->DeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
 
 
 }
