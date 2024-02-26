@@ -15,31 +15,31 @@ LRESULT CALLBACK MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM 
 		wsprintf(buffer, L"Key pressed: %d\n", static_cast<unsigned int>(wparam));
 		OutputDebugStringW(buffer); */
 
-		Game::Instance->Device->AddPressedKey(static_cast<unsigned int>(wparam));
+		Game::Instance->InDevice->AddPressedKey(static_cast<unsigned int>(wparam));
 		if (static_cast<unsigned int>(wparam) == 27) PostQuitMessage(0);
 		break;
 	}
 	case WM_KEYUP:
 	{
-		Game::Instance->Device->RemovePressedKey(static_cast<unsigned int>(wparam));
+		Game::Instance->InDevice->RemovePressedKey(static_cast<unsigned int>(wparam));
 		break;
 	}
 	case WM_MOUSEMOVE:
 	{
 		const POINTS pt = MAKEPOINTS(lparam);
-		Game::Instance->Device->MouseMove(pt);
+		Game::Instance->InDevice->MouseMove(pt);
 		break;
 	}
 	case WM_LBUTTONDOWN:
 	{
 		const POINTS pt = MAKEPOINTS(lparam);
-		Game::Instance->Device->MouseLeftClick(pt);
+		Game::Instance->InDevice->MouseLeftClick(pt);
 		break;
 	}
 	case WM_RBUTTONDOWN:
 	{
 		const POINTS pt = MAKEPOINTS(lparam);
-		Game::Instance->Device->MouseRightClick(pt);
+		Game::Instance->InDevice->MouseRightClick(pt);
 		break;
 	}
 	case WM_CLOSE:
@@ -60,7 +60,7 @@ Game::Game(HINSTANCE hInstanceNew) {
 }
 
 void Game::Initialize(HINSTANCE hInstanceNew) {
-	Device = new InputDevice();
+	InDevice = new InputDevice();
 	Display = new DisplayWin32(hInstanceNew, MessageHandler);
 	CreateSwapChain();
 	CreateBackBuffer();
@@ -89,7 +89,7 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 
 Game::~Game() {
 	delete[] Display;
-	delete[] Device;
+	delete[] InDevice;
 }
 
 std::optional<int> Game::processMessages() {

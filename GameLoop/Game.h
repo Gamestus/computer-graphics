@@ -23,7 +23,7 @@ class Game
 public:
 	static Game* Instance;
 	DisplayWin32* Display;
-	InputDevice* Device;
+	InputDevice* InDevice;
 	ID3D11RenderTargetView* RenderView;
 	ID3D11Texture2D* BackBuffer;
 	ID3D11DeviceContext* DeviceContext;
