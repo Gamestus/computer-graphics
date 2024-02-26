@@ -13,6 +13,10 @@ TriangleComponent::TriangleComponent(DirectX::XMFLOAT4 newPoints[6], LPCWSTR sha
 	Initialize(shader);
 }
 
+TriangleComponent::~TriangleComponent() {
+}
+
+
 void TriangleComponent::Initialize(LPCWSTR shaderFile) {
 	game = Game::Instance;
 
@@ -146,17 +150,19 @@ void TriangleComponent::Draw() {
 	game->DeviceContext->VSSetShader(vertexShader, nullptr, 0);
 	game->DeviceContext->PSSetShader(pixelShader, nullptr, 0);
 
+	//set buffer to vertex shader
+	game->DeviceContext->VSSetConstantBuffers(0, 1, &constantBuffer);
+
 	//Update buffer
 	D3D11_MAPPED_SUBRESOURCE res = {};
 	game->DeviceContext->Map(constantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &res);
 
-	float* dataPtr = reinterpret_cast<float*>(res.pData);
+	auto dataPtr = reinterpret_cast<float*>(res.pData);
 	memcpy(dataPtr, &data, sizeof(ConstData));
 
 	game->DeviceContext->Unmap(constantBuffer, 0);
 
-	//set buffer
-	game->DeviceContext->VSSetConstantBuffers(0, 1, &constantBuffer);
+
 
 	game->DeviceContext->DrawIndexed(3, 0, 0);
 

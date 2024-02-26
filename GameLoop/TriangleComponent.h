@@ -12,6 +12,7 @@ class TriangleComponent :
 {
 public:
 	TriangleComponent(DirectX::XMFLOAT4 points[6], LPCWSTR shader);
+	~TriangleComponent();
 	void Initialize(LPCWSTR shader);
 	void Draw();
 	/*void DestroyResources();
@@ -23,12 +24,15 @@ public:
 
 
 private:
-	float* data;
+
 
 	struct ConstData {
 		Vector4 offset;
 		Vector4 color;
 	};
+
+	//ConstData data{ Vector4(0.2f, 0.2f, 0.2f, 0.0f), Vector4(1.0f, 0.0f, 0.0f, 0.0f) };
+	ConstData data{ Vector4(0.5f, -0.5f, 0.5f, 0.0f), Vector4(0.0f, 0.0f, 0.6f, 0.3f) };
 
 	ID3D11Buffer* constantBuffer;
 
