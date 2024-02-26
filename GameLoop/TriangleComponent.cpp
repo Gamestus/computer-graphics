@@ -1,7 +1,8 @@
 #include "TriangleComponent.h"
 #include <chrono>
 
-TriangleComponent::TriangleComponent(DirectX::XMFLOAT4 newPoints[6]) {
+
+TriangleComponent::TriangleComponent(DirectX::XMFLOAT4 newPoints[6], LPCWSTR shader) {
 
 	points[0] = newPoints[0];
 	points[1] = newPoints[1];
@@ -9,15 +10,15 @@ TriangleComponent::TriangleComponent(DirectX::XMFLOAT4 newPoints[6]) {
 	points[3] = newPoints[3];
 	points[4] = newPoints[4];
 	points[5] = newPoints[5];
-	Initialize();
+	Initialize(shader);
 }
 
-void TriangleComponent::Initialize() {
+void TriangleComponent::Initialize(LPCWSTR shaderFile) {
 	game = Game::Instance;
 
 
 	ID3DBlob* errorVertexCode = nullptr;
-	auto res = D3DCompileFromFile(L"./Shaders/Shader.hlsl",
+	auto res = D3DCompileFromFile(shaderFile,
 		nullptr /*macros*/,
 		nullptr /*include*/,
 		"VSMain",
@@ -28,11 +29,16 @@ void TriangleComponent::Initialize() {
 		&errorVertexCode);
 
 
+	game->WrlDevice->CreateVertexShader(
+		vertexShaderByteCode->GetBufferPointer(),
+		vertexShaderByteCode->GetBufferSize(),
+		nullptr, &vertexShader);
+
 	D3D_SHADER_MACRO Shader_Macros[] = { "TEST", "1", "TCOLOR", "float4(0.0f, 1.0f, 0.0f, 1.0f)", nullptr, nullptr };
 
 
 	ID3DBlob* errorPixelCode;
-	res = D3DCompileFromFile(L"./Shaders/Shader.hlsl",
+	res = D3DCompileFromFile(shaderFile,
 		Shader_Macros /*macros*/,
 		nullptr /*include*/,
 		"PSMain",
@@ -42,11 +48,6 @@ void TriangleComponent::Initialize() {
 		&pixelShaderByteCode,
 		&errorPixelCode);
 
-
-	game->WrlDevice->CreateVertexShader(
-		vertexShaderByteCode->GetBufferPointer(),
-		vertexShaderByteCode->GetBufferSize(),
-		nullptr, &vertexShader);
 
 	game->WrlDevice->CreatePixelShader(
 		pixelShaderByteCode->GetBufferPointer(),
@@ -124,7 +125,7 @@ void TriangleComponent::Initialize() {
 	rastDesc.FillMode = D3D11_FILL_SOLID;
 	res = game->WrlDevice->CreateRasterizerState(&rastDesc, &rastState);
 
-
+	SetupConstBuffer();
 
 	
 }
@@ -144,10 +145,36 @@ void TriangleComponent::Draw() {
 	//set shaders
 	game->DeviceContext->VSSetShader(vertexShader, nullptr, 0);
 	game->DeviceContext->PSSetShader(pixelShader, nullptr, 0);
-	
+
+	//Update buffer
+	D3D11_MAPPED_SUBRESOURCE res = {};
+	game->DeviceContext->Map(constantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &res);
+
+	float* dataPtr = reinterpret_cast<float*>(res.pData);
+	memcpy(dataPtr, &data, sizeof(ConstData));
+
+	game->DeviceContext->Unmap(constantBuffer, 0);
+
+	//set buffer
+	game->DeviceContext->VSSetConstantBuffers(0, 1, &constantBuffer);
 
 	game->DeviceContext->DrawIndexed(3, 0, 0);
 
 
+
+}
+
+void TriangleComponent::SetupConstBuffer()
+{
+
+	D3D11_BUFFER_DESC constBufDesc = {};
+	constBufDesc.Usage = D3D11_USAGE_DYNAMIC;
+	constBufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	constBufDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	constBufDesc.MiscFlags = 0;
+	constBufDesc.StructureByteStride = 0;
+	constBufDesc.ByteWidth = sizeof(ConstData);
+
+	game->WrlDevice->CreateBuffer(&constBufDesc, nullptr, &constantBuffer);
 
 }
