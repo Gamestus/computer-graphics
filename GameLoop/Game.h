@@ -16,7 +16,7 @@
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "dxguid.lib")
 
-class TriangleComponent;
+class GameComponent;
 
 class Game
 {
@@ -27,7 +27,7 @@ public:
 	ID3D11RenderTargetView* RenderView;
 	ID3D11Texture2D* BackBuffer;
 	ID3D11DeviceContext* DeviceContext;
-	std::vector<TriangleComponent> components;
+	std::vector<std::unique_ptr<GameComponent>> components;
 	IDXGISwapChain* SwapChain;
 	HRESULT SwapDevice;
 	Microsoft::WRL::ComPtr<ID3D11Device> WrlDevice;

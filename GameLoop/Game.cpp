@@ -74,7 +74,7 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 		DirectX::XMFLOAT4(0.5f, -0.7f, 0.5f, 1.0f),
 		DirectX::XMFLOAT4(0.5f, 0.0f, 1.0f, 1.0f),
 	};
-	components.push_back(TriangleComponent(points1, L"./Shaders/Shader.hlsl"));
+	components.push_back(std::make_unique<TriangleComponent>(points1, L"./Shaders/Shader.hlsl"));
 
 	DirectX::XMFLOAT4 points2[6] = {
 		DirectX::XMFLOAT4(0.0f, 0.0f, 0.5f, 1.0f),
@@ -84,7 +84,7 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 		DirectX::XMFLOAT4(-0.5f, 0.7f, 0.5f, 1.0f),
 		DirectX::XMFLOAT4(0.5f, 0.0f, 1.0f, 1.0f),
 	};
-	components.push_back(TriangleComponent(points2, L"./Shaders/ShaderConstBuf.hlsl"));
+	components.push_back(std::make_unique<TriangleComponent>(points2, L"./Shaders/ShaderConstBuf.hlsl"));
 }
 
 Game::~Game() {
@@ -136,9 +136,10 @@ void Game::UpdateViewport() {
 }
 
 void Game::Update(float delta) {
-	TCHAR buffer[24];
-	StringCchPrintf(buffer, sizeof(buffer) / sizeof(TCHAR), L"%f\n", delta);
-	OutputDebugStringW(buffer);
+	for (auto& component : components)
+	{
+		component->UpdateChildren(delta);
+	}
 }
 
 void Game::Draw() {
@@ -154,7 +155,7 @@ void Game::Draw() {
 
 	for (auto& component : components)
 	{
-		component.Draw();
+		component->DrawChildren();
 	}
 
 	SwapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0);
