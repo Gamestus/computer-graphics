@@ -3,6 +3,7 @@
 #include <d3dcompiler.h>
 #include <directxmath.h>
 #include <d3d11.h>
+
 #include "SimpleMath.h"
 
 using namespace DirectX::SimpleMath;
@@ -11,7 +12,7 @@ class TriangleComponent :
     public GameComponent
 {
 public:
-	TriangleComponent(DirectX::XMFLOAT4 points[6], LPCWSTR shader);
+	TriangleComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, LPCWSTR shader);
 	~TriangleComponent();
 	void Initialize(LPCWSTR shader);
 	void Draw();
@@ -49,7 +50,7 @@ private:
 	ID3D11Buffer* vertexBuffer;
 	ID3D11Buffer* indexBuffer;
 
-    DirectX::XMFLOAT4 points[6];
+    std::vector<DirectX::XMFLOAT4> points;
 	ID3D11RasterizerState* rastState;
 
 	void SetupConstBuffer();

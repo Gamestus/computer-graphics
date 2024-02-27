@@ -2,14 +2,9 @@
 #include <chrono>
 
 
-TriangleComponent::TriangleComponent(DirectX::XMFLOAT4 newPoints[6], LPCWSTR shader) {
+TriangleComponent::TriangleComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, LPCWSTR shader) {
 
-	points[0] = newPoints[0];
-	points[1] = newPoints[1];
-	points[2] = newPoints[2];
-	points[3] = newPoints[3];
-	points[4] = newPoints[4];
-	points[5] = newPoints[5];
+	points = newPoints;
 	Initialize(shader);
 }
 
@@ -97,10 +92,10 @@ void TriangleComponent::Initialize(LPCWSTR shaderFile) {
 	vertexBufDesc.CPUAccessFlags = 0;
 	vertexBufDesc.MiscFlags = 0;
 	vertexBufDesc.StructureByteStride = 0;
-	vertexBufDesc.ByteWidth = sizeof(DirectX::XMFLOAT4) * std::size(points);
+	vertexBufDesc.ByteWidth = sizeof(DirectX::XMFLOAT4) * points.size();
 
 	D3D11_SUBRESOURCE_DATA vertexData = {};
-	vertexData.pSysMem = points;
+	vertexData.pSysMem = points.data();
 	vertexData.SysMemPitch = 0;
 	vertexData.SysMemSlicePitch = 0;
 

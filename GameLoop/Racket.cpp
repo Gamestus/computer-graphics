@@ -18,7 +18,8 @@ void Racket::Initialize() {
 	DirectX::XMFLOAT4(0.0f, -0.5f, 0.5f, 1.0f),
 	DirectX::XMFLOAT4(0.5f, 0.0f, 1.0f, 1.0f),
 	};
-	children.push_back(std::make_unique<TriangleComponent>(points1, L"./Shaders/ShaderConstBuf.hlsl"));
+	std::vector<DirectX::XMFLOAT4> vector(std::begin(points1), std::end(points1));
+	children.push_back(std::make_unique<TriangleComponent>(vector, L"./Shaders/ShaderConstBuf.hlsl"));
 	children.push_back(std::make_unique<CollisionRect>());
 }
 
