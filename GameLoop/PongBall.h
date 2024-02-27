@@ -1,5 +1,8 @@
 #pragma once
 #include "GameComponent.h"
+
+class TriangleComponent;
+
 class PongBall :
     public GameComponent
 {
@@ -13,5 +16,8 @@ public:
     void OnColliderEntered(CollisionRect* rect);
 private:
     void Initialize();
+    TriangleComponent* triangleComponent;
+    float invTimer = 0;
+    float invMax = 0.25;
 };
 

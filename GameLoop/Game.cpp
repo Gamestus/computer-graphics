@@ -144,7 +144,7 @@ void Game::Draw() {
 
 	DeviceContext->RSSetViewports(1, &viewport);
 
-	float color[] = { 0.3f, 0.3f, 0.3f, 1.0f };
+	float color[] = { 0.1f, 0.1f, 0.1f, 1.0f };
 	DeviceContext->ClearRenderTargetView(RenderView, color);
 	DeviceContext->OMSetRenderTargets(1, &RenderView, nullptr);
 	

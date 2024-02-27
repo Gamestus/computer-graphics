@@ -24,7 +24,9 @@ void PongBall::Initialize() {
 	};
 	std::vector<DirectX::XMFLOAT4> vector(std::begin(points1), std::end(points1));
 	children.push_back(std::make_unique<TriangleComponent>(vector, L"./Shaders/ShaderConstBuf.hlsl"));
-	
+	triangleComponent = dynamic_cast<TriangleComponent*>(children.back().get());
+
+
 	children.push_back(std::make_unique<CollisionRect>([this](CollisionRect* otherRect) {
 		OnColliderEntered(otherRect);
 		}));
@@ -34,6 +36,7 @@ void PongBall::Initialize() {
 #define NODGI
 
 void PongBall::Update(float delta) {
+	invTimer -= delta;
 	Vector2 pos = GetGlobalPosition() + delta * Velocity;
 	float minVelocity = -0.4f;
 	float maxVelocity = 0.4f;
@@ -65,14 +68,30 @@ void PongBall::Update(float delta) {
 
 void PongBall::OnColliderEntered(CollisionRect* rect)
 {
-	if (rect->IsHorizontal) {
+	if (rect->IsHorizontal && invTimer <= 0) {
 		Velocity.x = -Velocity.x;
-		Vector2 pos = GetGlobalPosition() + 0.02 * Velocity;
-		SetGlobalPosition(pos);
 		Velocity *= 1.1;
+		invTimer = invMax;
 	}
-	else {
+	else if (!rect->IsHorizontal) {
 		Velocity.y = -Velocity.y;
 	}
-	
+
+	std::vector<Vector4> colorArray = {
+		{0.8f, 0.0f, 0.0f, 1.0f},
+		{0.0f, 0.8f, 0.0f, 1.0f},
+		{0.0f, 0.0f, 0.8f, 1.0f},
+		{0.8f, 0.0f, 0.5f, 1.0f},
+		{0.5f, 0.8f, 0.0f, 1.0f},
+		{0.0f, 0.5f, 0.8f, 1.0f},
+		{0.8f, 0.5f, 0.0f, 1.0f},
+		{0.2f, 0.6f, 0.4f, 1.0f},
+		{0.4f, 0.2f, 0.6f, 1.0f},
+		{0.6f, 0.4f, 0.2f, 1.0f}
+	};
+
+	int randomIndex = std::rand() % colorArray.size();
+	Vector4 randomColor = colorArray[randomIndex];
+
+	triangleComponent->SetColor(randomColor);
 }

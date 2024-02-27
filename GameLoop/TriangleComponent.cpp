@@ -169,6 +169,11 @@ void TriangleComponent::Draw() {
 
 }
 
+void TriangleComponent::SetColor(Vector4 nColor)
+{
+	data.color = nColor;
+}
+
 void TriangleComponent::SetupConstBuffer()
 {
 

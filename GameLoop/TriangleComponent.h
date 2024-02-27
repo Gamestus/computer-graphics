@@ -16,9 +16,8 @@ public:
 	~TriangleComponent();
 	void Initialize(LPCWSTR shader);
 	void Draw();
-	/*void DestroyResources();
-	void Reload();
-	void Update();*/
+	void SetColor(Vector4 nColor);
+
 	std::chrono::time_point<std::chrono::steady_clock> PrevTime = std::chrono::steady_clock::now();
 	float totalTime = 0;
 	unsigned int frameCount = 0;
@@ -32,10 +31,9 @@ private:
 		Vector4 color;
 	};
 
-	//ConstData data{ Vector4(0.2f, 0.2f, 0.2f, 0.0f), Vector4(1.0f, 0.0f, 0.0f, 0.0f) };
 	ConstData data{ 
 		Vector4(globalPosition.x * 1.0f, globalPosition.y * 1.0f, 0.5f, 0.0f),
-		Vector4(0.0f, 0.0f, 0.6f, 0.3f) };
+		Vector4(0.9f, 0.6f, 0.6f, 1.0f) };
 
 	ID3D11Buffer* constantBuffer;
 
