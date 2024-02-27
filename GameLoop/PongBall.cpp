@@ -11,6 +11,10 @@ PongBall::PongBall() {
 
 void PongBall::Initialize() {
 	Velocity = Vector2(-speed, 0.0);
+	float minVelocity = -0.2f;
+	float maxVelocity = 0.2f;
+	float randomVelocity = minVelocity + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (maxVelocity - minVelocity)));
+	Velocity.y = randomVelocity;
 
 	DirectX::XMFLOAT4 points1[8] = {
 	DirectX::XMFLOAT4(0.0f, 0.0f, 0.5f / 4, 1.0f),
@@ -71,6 +75,7 @@ void PongBall::OnColliderEntered(CollisionRect* rect)
 	if (rect->IsHorizontal && invTimer <= 0) {
 		Velocity.x = -Velocity.x;
 		Velocity *= 1.1;
+		Velocity.Clamp(Vector2(-3, -3), Vector2(3, 3));
 		invTimer = invMax;
 	}
 	else if (!rect->IsHorizontal) {
