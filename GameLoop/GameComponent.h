@@ -1,8 +1,8 @@
 #pragma once
 #include <SimpleMath.h>
+#include "Game.h"
 
 using namespace DirectX::SimpleMath;
-#include "Game.h"
 
 class GameComponent
 {

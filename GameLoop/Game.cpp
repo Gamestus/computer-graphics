@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Racket.h"
+#include "PongBall.h"
 #include "Strsafe.h"
 
 Game* Game::Instance = nullptr;
@@ -62,11 +63,13 @@ Game::Game(HINSTANCE hInstanceNew) {
 void Game::Initialize(HINSTANCE hInstanceNew) {
 	InDevice = new InputDevice();
 	Display = new DisplayWin32(hInstanceNew, MessageHandler);
+	PhysServer = new PhysicsServer();
 	CreateSwapChain();
 	CreateBackBuffer();
 	UpdateViewport();
 		
 	components.push_back(std::make_unique<Racket>());
+	components.push_back(std::make_unique<PongBall>());
 }
 
 Game::~Game() {
@@ -122,6 +125,7 @@ void Game::Update(float delta) {
 	{
 		component->UpdateChildren(delta);
 	}
+	PhysServer->UpdatePhysics();
 }
 
 void Game::Draw() {

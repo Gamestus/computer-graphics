@@ -1,5 +1,6 @@
 #include "Racket.h"
 #include "TriangleComponent.h"
+#include "CollisionRect.h"
 #include "Keys.h"
 
 
@@ -18,7 +19,7 @@ void Racket::Initialize() {
 	DirectX::XMFLOAT4(0.5f, 0.0f, 1.0f, 1.0f),
 	};
 	children.push_back(std::make_unique<TriangleComponent>(points1, L"./Shaders/ShaderConstBuf.hlsl"));
-
+	children.push_back(std::make_unique<CollisionRect>());
 }
 
 #define NODGI

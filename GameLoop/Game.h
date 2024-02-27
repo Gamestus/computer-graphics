@@ -2,6 +2,7 @@
 #include "DisplayWin32.h"
 #include "InputDevice.h"
 #include "GameTimer.h"
+#include "PhysicsServer.h"
 #include <optional>
 #include <d3d.h>
 #include <d3d11.h>
@@ -31,6 +32,8 @@ public:
 	IDXGISwapChain* SwapChain;
 	HRESULT SwapDevice;
 	Microsoft::WRL::ComPtr<ID3D11Device> WrlDevice;
+
+	PhysicsServer* PhysServer;
 
 	int DebugAnnotation;
 	int Name;
