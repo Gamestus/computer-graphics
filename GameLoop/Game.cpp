@@ -74,7 +74,10 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 
 	components.push_back(std::make_unique<CollisionRect>(Vector2(800, 10)));
 	components.back()->SetGlobalPosition(Vector2(-1.0, -0.95));
-	components.push_back(std::make_unique<Racket>());
+	components.push_back(std::make_unique<Racket>(true));
+	components.back()->SetGlobalPosition(Vector2(-0.97, 0.2));
+	components.push_back(std::make_unique<Racket>(false));
+	components.back()->SetGlobalPosition(Vector2(0.9, 0.2));
 	components.push_back(std::make_unique<PongBall>());
 
 }
@@ -206,4 +209,19 @@ void Game::CreateSwapChain() {
 	{
 		OutputDebugStringW(L"D3D11CreateDeviceAndSwapChain! Oh, that was unexpected!");
 	}
+}
+
+void Game::AddScore(bool IsPlayerOne) {
+	if (IsPlayerOne) {
+		OutputDebugStringW(L"Player 1 Scores!\n");
+		p1Score++;
+	}
+	else {
+		OutputDebugStringW(L"Player 2 Scores!\n");
+		p2Score++;
+	}
+	OutputDebugStringW(L"Current score: \n");
+	wchar_t buffer[256];
+	wsprintf(buffer, L"%d : %d\n", p1Score, p2Score);
+	OutputDebugStringW(buffer);
 }

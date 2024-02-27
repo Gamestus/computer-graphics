@@ -25,7 +25,7 @@ CollisionRect::CollisionRect(CollisionCallback callback) : callback_(callback)
 
 void CollisionRect::Initialize()
 {
-	rect2D = SimpleMath::Rectangle(0, 0, 200, 200);
+	rect2D = SimpleMath::Rectangle(0, 0, 50, 50);
 	PhysicsServer::Instance->RegisterRect(this);
 }
 

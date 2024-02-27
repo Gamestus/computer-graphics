@@ -19,15 +19,15 @@ void InputDevice::RemovePressedKey(unsigned char keycode) {
 }
 
 void InputDevice::OnKeyDown(unsigned char keycode) {
-	wchar_t buffer[256];
-	wsprintf(buffer, L"Key is down: %d\n", static_cast<unsigned int>(keycode));
-	OutputDebugStringW(buffer); 
+	//wchar_t buffer[256];
+	//wsprintf(buffer, L"Key is down: %d\n", static_cast<unsigned int>(keycode));
+	//OutputDebugStringW(buffer); 
 }
 
 void InputDevice::OnKeyUp(unsigned char keycode) {
-	wchar_t buffer[256];
-	wsprintf(buffer, L"Key is up: %d\n", static_cast<unsigned int>(keycode));
-	OutputDebugStringW(buffer);
+	//wchar_t buffer[256];
+	//wsprintf(buffer, L"Key is up: %d\n", static_cast<unsigned int>(keycode));
+	//OutputDebugStringW(buffer);
 }
 
 void InputDevice::MouseRightClick(POINTS pt) {

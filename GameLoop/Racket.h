@@ -4,9 +4,11 @@ class Racket :
     public GameComponent
 {
 public:
-    float speed = 0.55f;
+    float speed = 0.95f;
 
-    Racket();
+    bool IsPlayerOne = true;
+
+    Racket(bool isPlayerOne);
     void Update(float delta);
 private:
     void Initialize();

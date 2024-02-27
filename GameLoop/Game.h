@@ -35,19 +35,14 @@ public:
 
 	PhysicsServer* PhysServer;
 
-	int DebugAnnotation;
-	int Name;
-	int PrevTime;
-	int RenderSRV;
-	int ScreenResized;
-	int StartTime;
-	int TotalTime;
+	int p1Score = 0;
+	int p2Score = 0;
 
 	Game(HINSTANCE hInstanceNew);
 	~Game();
 
 	int Run();
-
+	void AddScore(bool IsPlayerOne);
 private:
 	D3D11_VIEWPORT viewport = {};
 	GameTimer timer;
