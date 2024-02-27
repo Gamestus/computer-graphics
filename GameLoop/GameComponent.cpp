@@ -10,7 +10,7 @@ void GameComponent::Draw()
 void GameComponent::Initialize()
 {
 }
-void GameComponent::Update()
+void GameComponent::Update(float delta)
 {
 }
 
@@ -21,8 +21,28 @@ void GameComponent::DrawChildren() {
 	}
 }
 
+Vector2 GameComponent::GetGlobalPosition()
+{
+	return globalPosition;
+}
+
+Vector2 GameComponent::GetLocalPosition()
+{
+	return localPosition;
+}
+
+void GameComponent::SetGlobalPosition(Vector2 pos) {
+	globalPosition = pos;
+	UpdatePosition(globalPosition); //TODO
+}
+
+void GameComponent::SetLocalPosition(Vector2 pos) {
+	localPosition = pos;
+	UpdatePosition(globalPosition); //TODO
+}
+
 void GameComponent::UpdateChildren(float delta) {
-	Update();
+	Update(delta);
 	for (auto& child : children) {
 		child->UpdateChildren(delta);
 	}
