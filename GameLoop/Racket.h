@@ -4,7 +4,7 @@ class Racket :
     public GameComponent
 {
 public:
-    float speed = 0.05f;
+    float speed = 0.35f;
 
     Racket();
     void Update(float delta);
