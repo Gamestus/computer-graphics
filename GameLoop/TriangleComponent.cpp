@@ -13,8 +13,6 @@ TriangleComponent::~TriangleComponent() {
 
 
 void TriangleComponent::Initialize(LPCWSTR shaderFile) {
-	globalPosition.x = 0.5;
-	globalPosition.y = 0.5;
 	
 	game = Game::Instance;
 
@@ -103,7 +101,7 @@ void TriangleComponent::Initialize(LPCWSTR shaderFile) {
 	game->WrlDevice->CreateBuffer(&vertexBufDesc, &vertexData, &vertexBuffer);
 
 	//create index buffer
-	int indeces[] = { 0,1,2};
+	int indeces[] = { 0,1,2, 1,0,3 };
 	D3D11_BUFFER_DESC indexBufDesc = {};
 	indexBufDesc.Usage = D3D11_USAGE_DEFAULT;
 	indexBufDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -165,7 +163,7 @@ void TriangleComponent::Draw() {
 
 
 
-	game->DeviceContext->DrawIndexed(3, 0, 0);
+	game->DeviceContext->DrawIndexed(6, 0, 0);
 
 
 
