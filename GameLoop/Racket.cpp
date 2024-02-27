@@ -21,6 +21,8 @@ void Racket::Initialize() {
 
 }
 
+#define NODGI
+
 void Racket::Update(float delta) {
 	Vector2 input;
 
@@ -30,6 +32,7 @@ void Racket::Update(float delta) {
 	else if (Game::Instance->InDevice->IsKeyDown(83)) {
 		input.y = -1;
 	}
-	
-	SetGlobalPosition(GetGlobalPosition() + input * speed);
+	Vector2 pos = GetGlobalPosition() + speed * input;
+	pos.Clamp(Vector2(-1.0f, -1.0f), Vector2(1.0f, 1.0f));
+	SetGlobalPosition(pos);	
 }
