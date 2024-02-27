@@ -11,16 +11,17 @@ class CollisionRect :
 public:
     using CollisionCallback = std::function<void()>;
 
+    SimpleMath::Rectangle rect2D;
 
     void OnCollision() {
         if (callback_) { callback_(); }
     }
 
-    SimpleMath::Rectangle rect2D;
-
-    CollisionRect(CollisionCallback callback) : callback_(callback) { Initialize(); };
     CollisionRect();
-    const DirectX::SimpleMath::Rectangle& GetRect() const;
+    CollisionRect(Vector2 size);
+    CollisionRect(CollisionCallback callback);
+
+    void Update(float delta);
 private:
     CollisionCallback callback_;
     void Initialize();

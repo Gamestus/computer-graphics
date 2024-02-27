@@ -4,7 +4,7 @@ class PongBall :
     public GameComponent
 {
 public:
-    float speed = 0.35f;
+    float speed = 0.0f;
 
     Vector2 Velocity;
 

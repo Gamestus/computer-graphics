@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Racket.h"
 #include "PongBall.h"
+#include "CollisionRect.h"
 #include "Strsafe.h"
 
 Game* Game::Instance = nullptr;
@@ -68,8 +69,14 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	CreateBackBuffer();
 	UpdateViewport();
 		
+	components.push_back(std::make_unique<CollisionRect>(Vector2(800, 10)));
+	components.back()->SetGlobalPosition(Vector2(-1.0, 1.0));
+
+	components.push_back(std::make_unique<CollisionRect>(Vector2(800, 10)));
+	components.back()->SetGlobalPosition(Vector2(-1.0, -0.95));
 	components.push_back(std::make_unique<Racket>());
 	components.push_back(std::make_unique<PongBall>());
+
 }
 
 Game::~Game() {
