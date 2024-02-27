@@ -11,6 +11,13 @@ CollisionRect::CollisionRect(Vector2 size)
 	PhysicsServer::Instance->RegisterRect(this);
 }
 
+CollisionRect::CollisionRect(Vector2 size, bool isHorizontal)
+{
+	IsHorizontal = isHorizontal;
+	rect2D = SimpleMath::Rectangle(0, 0, size.x, size.y);
+	PhysicsServer::Instance->RegisterRect(this);
+}
+
 CollisionRect::CollisionRect(CollisionCallback callback) : callback_(callback)
 {
 	Initialize();

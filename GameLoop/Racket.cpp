@@ -22,7 +22,7 @@ void Racket::Initialize() {
 	};
 	std::vector<DirectX::XMFLOAT4> vector(std::begin(points1), std::end(points1));
 	children.push_back(std::make_unique<TriangleComponent>(vector, L"./Shaders/ShaderConstBuf.hlsl"));
-	children.push_back(std::make_unique<CollisionRect>());
+	children.push_back(std::make_unique<CollisionRect>(Vector2(200, 200), true));
 }
 
 #define NODGI

@@ -24,9 +24,10 @@ void PongBall::Initialize() {
 	};
 	std::vector<DirectX::XMFLOAT4> vector(std::begin(points1), std::end(points1));
 	children.push_back(std::make_unique<TriangleComponent>(vector, L"./Shaders/ShaderConstBuf.hlsl"));
-	children.push_back(std::make_unique<CollisionRect>([this]() {
-		OnColliderEntered();
-	}));
+	
+	children.push_back(std::make_unique<CollisionRect>([this](CollisionRect* otherRect) {
+		OnColliderEntered(otherRect);
+		}));
 
 }
 
@@ -38,8 +39,15 @@ void PongBall::Update(float delta) {
 	SetGlobalPosition(pos);
 }
 
-void PongBall::OnColliderEntered()
+void PongBall::OnColliderEntered(CollisionRect* rect)
 {
-	OutputDebugStringW(L"Collision!\n");
-	Velocity = -Velocity;
+	if (rect->IsHorizontal) {
+		OutputDebugStringW(L"IsHorizontal!\n");
+		Velocity.x = -Velocity.x;
+	}
+	else {
+		OutputDebugStringW(L"IsVertical!\n");
+		Velocity.y = -Velocity.y;
+	}
+	
 }
