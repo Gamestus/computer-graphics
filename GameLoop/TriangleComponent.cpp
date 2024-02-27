@@ -18,6 +18,9 @@ TriangleComponent::~TriangleComponent() {
 
 
 void TriangleComponent::Initialize(LPCWSTR shaderFile) {
+	globalPosition.x = 0.5;
+	globalPosition.y = 0.5;
+	
 	game = Game::Instance;
 
 
@@ -137,6 +140,9 @@ void TriangleComponent::Initialize(LPCWSTR shaderFile) {
 void TriangleComponent::Draw() {
 	UINT strides[] = { 32 };
 	UINT offsets[] = { 0 };
+
+	data.offset = Vector4(globalPosition.x, globalPosition.y, 0.5f, 0.0f);
+
 
 	game->DeviceContext->RSSetState(rastState);
 

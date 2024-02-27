@@ -32,7 +32,9 @@ private:
 	};
 
 	//ConstData data{ Vector4(0.2f, 0.2f, 0.2f, 0.0f), Vector4(1.0f, 0.0f, 0.0f, 0.0f) };
-	ConstData data{ Vector4(0.5f, -0.5f, 0.5f, 0.0f), Vector4(0.0f, 0.0f, 0.6f, 0.3f) };
+	ConstData data{ 
+		Vector4(globalPosition.x * 1.0f, globalPosition.y * 1.0f, 0.5f, 0.0f),
+		Vector4(0.0f, 0.0f, 0.6f, 0.3f) };
 
 	ID3D11Buffer* constantBuffer;
 
