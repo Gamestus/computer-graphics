@@ -39,13 +39,7 @@
     <ClInclude Include="CollisionRect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Racket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PhysicsServer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PongBall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -74,13 +68,7 @@
     <ClCompile Include="CollisionRect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Racket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PhysicsServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PongBall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,6 +1,4 @@
 #include "Game.h"
-#include "Racket.h"
-#include "PongBall.h"
 #include "CollisionRect.h"
 #include "Strsafe.h"
 
@@ -68,17 +66,6 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	CreateSwapChain();
 	CreateBackBuffer();
 	UpdateViewport();
-		
-	components.push_back(std::make_unique<CollisionRect>(Vector2(800, 10)));
-	components.back()->SetGlobalPosition(Vector2(-1.0, 1.0));
-
-	components.push_back(std::make_unique<CollisionRect>(Vector2(800, 10)));
-	components.back()->SetGlobalPosition(Vector2(-1.0, -0.95));
-	components.push_back(std::make_unique<Racket>(true));
-	components.back()->SetGlobalPosition(Vector2(-0.97, 0.2));
-	components.push_back(std::make_unique<Racket>(false));
-	components.back()->SetGlobalPosition(Vector2(0.9, 0.2));
-	components.push_back(std::make_unique<PongBall>());
 
 }
 
