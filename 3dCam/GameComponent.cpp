@@ -27,3 +27,9 @@ void GameComponent::UpdateChildren(float delta) {
 		child->UpdateChildren(delta);
 	}
 }
+
+void GameComponent::AddChild(std::unique_ptr<GameComponent> child)
+{
+	children.push_back(child);
+	child->parent.reset(this);
+}
