@@ -34,12 +34,9 @@ void MeshComponent::Initialize(const std::vector<int>& indices) {
 		vertexShaderByteCode->GetBufferSize(),
 		nullptr, &vertexShader);
 
-	D3D_SHADER_MACRO Shader_Macros[] = { "TEST", "1", "TCOLOR", "float4(0.0f, 1.0f, 0.0f, 1.0f)", nullptr, nullptr };
-
-
 	ID3DBlob* errorPixelCode;
 	res = D3DCompileFromFile(ShaderFile,
-		Shader_Macros /*macros*/,
+		nullptr /*macros*/,
 		nullptr /*include*/,
 		"PSMain",
 		"ps_5_0",
@@ -133,7 +130,7 @@ void MeshComponent::Draw() {
 	UINT strides[] = { 32 };
 	UINT offsets[] = { 0 };
 
-	data.offset = Vector4(globalPosition.x, globalPosition.y, 0.5f, 0.0f);
+	//data.offset = Vector4(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f);
 
 
 	game->DeviceContext->RSSetState(rastState);
@@ -162,7 +159,7 @@ void MeshComponent::Draw() {
 
 
 
-	game->DeviceContext->DrawIndexed(6, 0, 0);
+	game->DeviceContext->DrawIndexed(points.size(), 0, 0);
 
 
 

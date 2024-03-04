@@ -1,6 +1,8 @@
 #pragma once
 #include "GameComponent.h"
 
+namespace dx = DirectX;
+
 class GameComponent3D :
     public GameComponent
 {
@@ -16,4 +18,3 @@ protected:
 private:
 	void UpdatePosition(Vector3 parentGlobalPosition);
 };
-

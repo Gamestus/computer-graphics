@@ -27,12 +27,16 @@ private:
 
 
 	struct ConstData {
-		Vector4 offset;
+		dx::XMMATRIX transform;
 		Vector4 color;
 	};
 
 	ConstData data{ 
-		Vector4(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f),
+		dx::XMMatrixTranspose(
+			dx::XMMatrixTranslation(globalPosition.x,globalPosition.y,4.0f)*
+				dx::XMMatrixPerspectiveLH(1.0f,3.0f / 4.0f,0.5f,10.0f)
+		),
+		//Vector4(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f),
 		Vector4(0.9f, 0.6f, 0.6f, 1.0f) };
 
 	ID3D11Buffer* constantBuffer;

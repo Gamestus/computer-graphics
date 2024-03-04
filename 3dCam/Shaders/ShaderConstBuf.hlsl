@@ -12,7 +12,7 @@ struct PS_IN
 
 struct ConstantData
 {
-	float4 offset;
+	matrix transform;
 	float4 color;
 };
 
@@ -24,7 +24,7 @@ PS_IN VSMain(VS_IN input, uint vId : SV_VertexID)
 {
 	PS_IN output = (PS_IN) 0;
 	
-	output.pos = float4(input.pos.xyz + ConstData.offset.xyz, 1.0f);
+	output.pos = mul(input.pos,ConstData.transform);
 	output.col = ConstData.color;
 	
 	return output;
