@@ -146,7 +146,7 @@
     <ClInclude Include="Keys.h" />
     <ClInclude Include="InputDevice.h" />
     <ClInclude Include="PhysicsServer.h" />
-    <ClInclude Include="TriangleComponent.h" />
+    <ClInclude Include="MeshComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CollisionRect.cpp" />
@@ -158,7 +158,7 @@
     <ClCompile Include="InputDevice.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="PhysicsServer.cpp" />
-    <ClCompile Include="TriangleComponent.cpp" />
+    <ClCompile Include="MeshComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

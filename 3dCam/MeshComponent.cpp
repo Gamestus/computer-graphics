@@ -1,18 +1,18 @@
-#include "TriangleComponent.h"
+#include "MeshComponent.h"
 #include <chrono>
 
 
-TriangleComponent::TriangleComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, LPCWSTR shader) {
+MeshComponent::MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, LPCWSTR shader) {
 
 	points = newPoints;
 	Initialize(shader);
 }
 
-TriangleComponent::~TriangleComponent() {
+MeshComponent::~MeshComponent() {
 }
 
 
-void TriangleComponent::Initialize(LPCWSTR shaderFile) {
+void MeshComponent::Initialize(LPCWSTR shaderFile) {
 	
 	game = Game::Instance;
 
@@ -130,7 +130,7 @@ void TriangleComponent::Initialize(LPCWSTR shaderFile) {
 	
 }
 
-void TriangleComponent::Draw() {
+void MeshComponent::Draw() {
 	UINT strides[] = { 32 };
 	UINT offsets[] = { 0 };
 
@@ -169,12 +169,12 @@ void TriangleComponent::Draw() {
 
 }
 
-void TriangleComponent::SetColor(Vector4 nColor)
+void MeshComponent::SetColor(Vector4 nColor)
 {
 	data.color = nColor;
 }
 
-void TriangleComponent::SetupConstBuffer()
+void MeshComponent::SetupConstBuffer()
 {
 
 	D3D11_BUFFER_DESC constBufDesc = {};

@@ -8,12 +8,12 @@
 
 using namespace DirectX::SimpleMath;
 
-class TriangleComponent :
+class MeshComponent :
     public GameComponent
 {
 public:
-	TriangleComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, LPCWSTR shader);
-	~TriangleComponent();
+	MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, LPCWSTR shader);
+	~MeshComponent();
 	void Initialize(LPCWSTR shader);
 	void Draw();
 	void SetColor(Vector4 nColor);
