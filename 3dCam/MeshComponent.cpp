@@ -2,23 +2,23 @@
 #include <chrono>
 
 
-MeshComponent::MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, LPCWSTR shader) {
+MeshComponent::MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, const std::vector<int>& indices) {
 
 	points = newPoints;
-	Initialize(shader);
+	Initialize(indices);
 }
 
 MeshComponent::~MeshComponent() {
 }
 
 
-void MeshComponent::Initialize(LPCWSTR shaderFile) {
+void MeshComponent::Initialize(const std::vector<int>& indices) {
 	
 	game = Game::Instance;
 
 
 	ID3DBlob* errorVertexCode = nullptr;
-	auto res = D3DCompileFromFile(shaderFile,
+	auto res = D3DCompileFromFile(ShaderFile,
 		nullptr /*macros*/,
 		nullptr /*include*/,
 		"VSMain",
@@ -38,7 +38,7 @@ void MeshComponent::Initialize(LPCWSTR shaderFile) {
 
 
 	ID3DBlob* errorPixelCode;
-	res = D3DCompileFromFile(shaderFile,
+	res = D3DCompileFromFile(ShaderFile,
 		Shader_Macros /*macros*/,
 		nullptr /*include*/,
 		"PSMain",
@@ -101,17 +101,16 @@ void MeshComponent::Initialize(LPCWSTR shaderFile) {
 	game->WrlDevice->CreateBuffer(&vertexBufDesc, &vertexData, &vertexBuffer);
 
 	//create index buffer
-	int indeces[] = { 0,1,2, 1,0,3 };
 	D3D11_BUFFER_DESC indexBufDesc = {};
 	indexBufDesc.Usage = D3D11_USAGE_DEFAULT;
 	indexBufDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufDesc.CPUAccessFlags = 0;
 	indexBufDesc.MiscFlags = 0;
 	indexBufDesc.StructureByteStride = 0;
-	indexBufDesc.ByteWidth = sizeof(int) * std::size(indeces);
+	indexBufDesc.ByteWidth = sizeof(int) * indices.size();
 
 	D3D11_SUBRESOURCE_DATA indexData = {};
-	indexData.pSysMem = indeces;
+	indexData.pSysMem = indices.data();
 	indexData.SysMemPitch = 0;
 	indexData.SysMemSlicePitch = 0;
 

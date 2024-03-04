@@ -1,5 +1,5 @@
 #pragma once
-#include "GameComponent.h"
+#include "GameComponent3D.h"
 #include <d3dcompiler.h>
 #include <directxmath.h>
 #include <d3d11.h>
@@ -9,19 +9,19 @@
 using namespace DirectX::SimpleMath;
 
 class MeshComponent :
-    public GameComponent
+    public GameComponent3D
 {
 public:
-	MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, LPCWSTR shader);
+	MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, const std::vector<int>& indices);
 	~MeshComponent();
-	void Initialize(LPCWSTR shader);
+	void Initialize(const std::vector<int>& indices);
 	void Draw();
 	void SetColor(Vector4 nColor);
 
 	std::chrono::time_point<std::chrono::steady_clock> PrevTime = std::chrono::steady_clock::now();
 	float totalTime = 0;
 	unsigned int frameCount = 0;
-
+	LPCWSTR ShaderFile = L"./Shaders/ShaderConstBuf.hlsl";
 
 private:
 
@@ -32,7 +32,7 @@ private:
 	};
 
 	ConstData data{ 
-		Vector4(globalPosition.x * 1.0f, globalPosition.y * 1.0f, 0.5f, 0.0f),
+		Vector4(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f),
 		Vector4(0.9f, 0.6f, 0.6f, 1.0f) };
 
 	ID3D11Buffer* constantBuffer;
