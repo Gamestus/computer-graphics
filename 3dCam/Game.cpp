@@ -67,6 +67,7 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	CreateBackBuffer();
 	UpdateViewport();
 
+	RootComponent = new GameComponent();
 }
 
 Game::~Game() {
@@ -118,10 +119,7 @@ void Game::UpdateViewport() {
 }
 
 void Game::Update(float delta) {
-	for (auto& component : components)
-	{
-		component->UpdateChildren(delta);
-	}
+	RootComponent->UpdateChildren(delta);
 	PhysServer->UpdatePhysics();
 }
 
@@ -135,11 +133,7 @@ void Game::Draw() {
 	DeviceContext->ClearRenderTargetView(RenderView, color);
 	DeviceContext->OMSetRenderTargets(1, &RenderView, nullptr);
 	
-
-	for (auto& component : components)
-	{
-		component->DrawChildren();
-	}
+	RootComponent->DrawChildren();
 
 	SwapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0);
 }

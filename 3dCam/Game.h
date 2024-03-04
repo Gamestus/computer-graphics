@@ -28,7 +28,7 @@ public:
 	ID3D11RenderTargetView* RenderView;
 	ID3D11Texture2D* BackBuffer;
 	ID3D11DeviceContext* DeviceContext;
-	std::vector<std::unique_ptr<GameComponent>> components;
+	GameComponent* RootComponent;
 	IDXGISwapChain* SwapChain;
 	HRESULT SwapDevice;
 	Microsoft::WRL::ComPtr<ID3D11Device> WrlDevice;
