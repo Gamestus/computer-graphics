@@ -13,9 +13,9 @@ class MeshComponent :
     public GameComponent3D
 {
 public:
-	MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, const std::vector<int>& indices);
+	MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, const std::vector<int>& nIndices);
 	~MeshComponent();
-	void Initialize(const std::vector<int>& indices);
+	void Initialize(const std::vector<int>& nIndices);
 	void Draw();
 	void SetColor(Vector4 nColor);
 
@@ -57,6 +57,7 @@ private:
 	ID3D11Buffer* indexBuffer;
 
     std::vector<DirectX::XMFLOAT4> points;
+    std::vector<int> indices;
 	ID3D11RasterizerState* rastState;
 
 	void SetupConstBuffer();

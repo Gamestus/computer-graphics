@@ -2,20 +2,20 @@
 #include <chrono>
 
 
-MeshComponent::MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, const std::vector<int>& indices) {
+MeshComponent::MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, const std::vector<int>& nIndices) {
 
 	points = newPoints;
-	Initialize(indices);
+	Initialize(nIndices);
 }
 
 MeshComponent::~MeshComponent() {
 }
 
 
-void MeshComponent::Initialize(const std::vector<int>& indices) {
+void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 	
 	game = Game::Instance;
-
+	indices = nIndices;
 
 	ID3DBlob* errorVertexCode = nullptr;
 	auto res = D3DCompileFromFile(ShaderFile,
@@ -162,7 +162,7 @@ void MeshComponent::Draw() {
 
 
 
-	game->DeviceContext->DrawIndexed(points.size(), 0, 0);
+	game->DeviceContext->DrawIndexed(indices.size(), 0, 0);
 
 
 

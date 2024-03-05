@@ -16,7 +16,7 @@ DirectX::XMMATRIX Camera::GetMatrix()
         dx::XMVectorZero(),
         dx::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)
     ) * dx::XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
-    return matrix * dx::XMMatrixPerspectiveLH(1.0f, 1.0f, 0.1f, 10.0f);
+    return matrix * dx::XMMatrixPerspectiveLH(1.0f, 1.0f, 0.4f, 10.0f);
 }
 
 #define NODGI
@@ -38,5 +38,5 @@ void Camera::Update(float delta) {
 		input.x = -1;
 	}
 	orbitPhi += input.y * delta * 2;
-	orbitTheta += input.x * delta * 2;
+	orbitTheta -= input.x * delta * 2;
 }
