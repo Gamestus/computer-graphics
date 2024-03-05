@@ -3,12 +3,13 @@
 
 Camera::Camera()
 {
+	globalPosition.z = distance;
 }
 
 DirectX::XMMATRIX Camera::GetMatrix()
 {
     auto pos = dx::XMVector3Transform(
-        dx::XMVectorSet(0.0f, 0.0f, -distance, 0.0f),
+        dx::XMVectorSet(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f),
         dx::XMMatrixRotationRollPitchYaw(orbitPhi, -orbitTheta, 0.0f)
     );
     auto matrix = dx::XMMatrixLookAtLH(
@@ -37,6 +38,37 @@ void Camera::Update(float delta) {
 	else if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::Right))) {
 		input.x = -1;
 	}
-	orbitPhi += input.y * delta * 2;
+
+	float clampedValue = orbitPhi + input.y * delta * 2;
+	if (clampedValue < -1.5f)
+		clampedValue = -1.5f;
+	else if (clampedValue > 1.5f)
+		clampedValue = 1.5f;
+
+	orbitPhi = clampedValue;
 	orbitTheta -= input.x * delta * 2;
+
+	Vector3 moveInput;
+	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::E))) {
+		moveInput.z = 1;
+	}
+	else if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::Q))) {
+		moveInput.z = -1;
+	}
+
+	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::W))) {
+		moveInput.x = 1;
+	}
+	else if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::S))) {
+		moveInput.x = -1;
+	}
+
+	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::A))) {
+		moveInput.y = 1;
+	}
+	else if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D))) {
+		moveInput.y = -1;
+	}
+
+	rotation += moveInput * delta * 2;
 }
