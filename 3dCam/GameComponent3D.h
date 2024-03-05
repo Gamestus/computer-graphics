@@ -15,6 +15,7 @@ public:
 protected:
 	Vector3 globalPosition;
 	Vector3 localPosition;
+	Vector3 rotation;
 private:
 	void UpdatePosition(Vector3 parentGlobalPosition);
 };

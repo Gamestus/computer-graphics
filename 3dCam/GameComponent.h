@@ -15,6 +15,12 @@ public:
 	void DrawChildren();
 	void UpdateChildren(float delta);
 	virtual void AddChild(std::unique_ptr<GameComponent> child);
+
+	template<typename T>
+	T* GetChild(int index)
+	{
+		return dynamic_cast<T*>(children[index].get());
+	}
 protected:
 	Vector2 globalPosition;
 	Vector2 localPosition;

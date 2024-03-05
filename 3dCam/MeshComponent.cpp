@@ -131,7 +131,10 @@ void MeshComponent::Draw() {
 	UINT offsets[] = { 0 };
 
 	//data.offset = Vector4(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f);
-
+	data.transform = dx::XMMatrixTranspose(
+		dx::XMMatrixTranslation(globalPosition.x, globalPosition.y, 4.0f) *
+		camera->GetMatrix()
+	);
 
 	game->DeviceContext->RSSetState(rastState);
 

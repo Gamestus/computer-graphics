@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "CollisionRect.h"
 #include "MeshComponent.h"
+#include "Camera.h"
 #include "Strsafe.h"
 
 Game* Game::Instance = nullptr;
@@ -98,6 +99,9 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	};
 
 	RootComponent->AddChild(std::make_unique<MeshComponent>(vertices, indices));
+	RootComponent->AddChild(std::make_unique<Camera>());
+	auto mesh = RootComponent->GetChild<MeshComponent>(0);
+	mesh->camera = RootComponent->GetChild<Camera>(1);
 }
 
 Game::~Game() {
