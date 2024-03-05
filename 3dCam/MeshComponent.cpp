@@ -132,7 +132,7 @@ void MeshComponent::Draw() {
 
 	//data.offset = Vector4(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f);
 	data.transform = dx::XMMatrixTranspose(
-		dx::XMMatrixTranslation(globalPosition.x, globalPosition.y, 4.0f) *
+		GetTransform() *
 		camera->GetMatrix()
 	);
 
@@ -171,6 +171,12 @@ void MeshComponent::Draw() {
 void MeshComponent::SetColor(Vector4 nColor)
 {
 	data.color = nColor;
+}
+
+dx::XMMATRIX MeshComponent::GetTransform()
+{
+	return dx::XMMatrixRotationRollPitchYawFromVector(rotation) *
+		dx::XMMatrixTranslation(globalPosition.x, globalPosition.y, globalPosition.z);
 }
 
 void MeshComponent::SetupConstBuffer()

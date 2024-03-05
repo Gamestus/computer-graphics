@@ -26,6 +26,7 @@ public:
 
 	Camera* camera;
 
+	dx::XMMATRIX GetTransform();
 private:
 
 
@@ -36,7 +37,7 @@ private:
 
 	ConstData data{ 
 		dx::XMMatrixTranspose(
-			dx::XMMatrixTranslation(globalPosition.x, globalPosition.y, 4.0f) *
+			GetTransform() *
 				dx::XMMatrixPerspectiveLH(1.0f, 1.0f ,0.1f, 10.0f)
 		),
 		//Vector4(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f),
