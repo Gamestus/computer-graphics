@@ -50,6 +50,7 @@ private:
 
 	void Update(float delta);
 	void CreateBackBuffer();
+	void CreateDephStencilBuffer();
 	void CreateSwapChain();
 	void CreateVertexIndexBuffers();
 	void UpdateViewport();

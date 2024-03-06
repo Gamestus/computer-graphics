@@ -67,6 +67,7 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	PhysServer = new PhysicsServer();
 	CreateSwapChain();
 	CreateBackBuffer();
+	CreateDephStencilBuffer();
 	UpdateViewport();
 
 	RootComponent = new GameComponent();
@@ -191,6 +192,33 @@ void Game::CreateBackBuffer() {
 	{
 		OutputDebugStringW(L"CreateRenderTargetView! Oh, that was unexpected!");
 	}
+}
+
+void Game::CreateDephStencilBuffer()
+{
+	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+	dsDesc.DepthEnable = TRUE;
+	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	ID3D11DepthStencilState* DSState;
+	WrlDevice->CreateDepthStencilState(&dsDesc, &DSState);
+
+	DeviceContext->OMSetDepthStencilState( DSState, 1 );
+
+	D3D11_TEXTURE2D_DESC descDepth = {};
+	descDepth.Width = Display->ClientWidth;
+	descDepth.Height = Display->ClientHeight;
+	descDepth.MipLevels - 1;
+	descDepth.ArraySize = 1;
+	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
+	descDepth.SampleDesc.Count = 1;
+	descDepth.SampleDesc.Quality = 0;
+	descDepth.Usage = D3D11_USAGE_DEFAULT;
+	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+	ID3D11Texture2D* DepthStencil;
+	WrlDevice->CreateTexture2D(&descDepth, nullptr, &DepthStencil);
+
 }
 
 void Game::CreateSwapChain() {
