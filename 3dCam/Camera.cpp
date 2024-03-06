@@ -8,6 +8,12 @@ Camera::Camera()
 DirectX::XMMATRIX Camera::GetMatrix()
 {
 	dx::XMMATRIX matrix;
+	dx::XMMATRIX rotationMatrix = dx::XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
+
+	dx::XMMATRIX projection = isOrthographic ?
+		dx::XMMatrixPerspectiveLH(1.0f, 1.0f, 0.4f, 10.0f) : DirectX::XMMatrixOrthographicLH(10.0f, 10.0f, 0.4f, 10.0f);
+
+
 	if (isOrbit) {
 		auto pos = dx::XMVector3Transform(
 			dx::XMVectorSet(0, 0, -distance, 0.0f),
@@ -17,10 +23,9 @@ DirectX::XMMATRIX Camera::GetMatrix()
 			pos,
 			dx::XMVectorZero(),
 			dx::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)
-		) * dx::XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
+		) * rotationMatrix;
 	}
 	else {
-		dx::XMMATRIX rotationMatrix = dx::XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
 		dx::XMVECTOR rotatedForwardVector = dx::XMVector3Transform(forwardVector, rotationMatrix);
 		matrix = dx::XMMatrixLookToLH(
 			dx::XMLoadFloat3(&globalPosition),
@@ -28,7 +33,7 @@ DirectX::XMMATRIX Camera::GetMatrix()
 			dx::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
 	}
 
-    return matrix * dx::XMMatrixPerspectiveLH(1.0f, 1.0f, 0.4f, 10.0f);
+	return matrix * projection;
 }
 
 #define NODGI
@@ -117,5 +122,11 @@ void Camera::Update(float delta) {
 		rotation = Vector3(0, 0, 0);
 		globalPosition = Vector3(0, 0, -distance);
 		isOrbit = false;
+	}
+	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D3))) {
+		isOrthographic = false;
+	}
+	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D4))) {
+		isOrthographic = true;
 	}
 }

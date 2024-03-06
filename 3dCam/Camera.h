@@ -11,6 +11,7 @@ public:
     float moveSpeed = 2.0f;
 private:
     bool isOrbit = true;
+    bool isOrthographic = true;
     float distance = 5.0f;
     float orbitTheta = 0.0f;
     float orbitPhi = 0.0f;
