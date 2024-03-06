@@ -106,10 +106,16 @@ void Camera::Update(float delta) {
 		clampedValue = 12.5f;
 	distance = clampedValue;
 
-	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::Tab))) {
+	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D1))) {
+		distance = 5.0f;
 		rotation = Vector3(0, 0, 0);
 		globalPosition = Vector3(0, 0, distance);
+		isOrbit = true;
+	}
+	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D2))) {
 		distance = 5.0f;
-		isOrbit = !isOrbit;
+		rotation = Vector3(0, 0, 0);
+		globalPosition = Vector3(0, 0, -distance);
+		isOrbit = false;
 	}
 }
