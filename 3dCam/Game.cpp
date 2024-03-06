@@ -67,7 +67,7 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	PhysServer = new PhysicsServer();
 	CreateSwapChain();
 	CreateBackBuffer();
-	CreateDephStencilBuffer();
+	CreateDepthStencilBuffer();
 	UpdateViewport();
 
 	RootComponent = new GameComponent();
@@ -174,8 +174,10 @@ void Game::Draw() {
 
 	float color[] = { 0.1f, 0.1f, 0.1f, 1.0f };
 	DeviceContext->ClearRenderTargetView(RenderView, color);
-	DeviceContext->OMSetRenderTargets(1, &RenderView, nullptr);
-	
+	DeviceContext->ClearDepthStencilView(DSView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+	DeviceContext->OMSetRenderTargets(1, &RenderView, DSView);
+
 	RootComponent->DrawChildren();
 
 	SwapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0);
@@ -194,7 +196,7 @@ void Game::CreateBackBuffer() {
 	}
 }
 
-void Game::CreateDephStencilBuffer()
+void Game::CreateDepthStencilBuffer()
 {
 	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
 	dsDesc.DepthEnable = TRUE;
@@ -219,6 +221,13 @@ void Game::CreateDephStencilBuffer()
 	ID3D11Texture2D* DepthStencil;
 	WrlDevice->CreateTexture2D(&descDepth, nullptr, &DepthStencil);
 
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
+	descDSV.Format = DXGI_FORMAT_D32_FLOAT;
+	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	descDSV.Texture2D.MipSlice = 0;
+	WrlDevice->CreateDepthStencilView(
+		DepthStencil, &descDSV, &DSView
+	);
 }
 
 void Game::CreateSwapChain() {

@@ -32,6 +32,8 @@ public:
 	IDXGISwapChain* SwapChain;
 	HRESULT SwapDevice;
 	Microsoft::WRL::ComPtr<ID3D11Device> WrlDevice;
+	ID3D11DepthStencilView* DSView;
+
 
 	PhysicsServer* PhysServer;
 
@@ -50,7 +52,7 @@ private:
 
 	void Update(float delta);
 	void CreateBackBuffer();
-	void CreateDephStencilBuffer();
+	void CreateDepthStencilBuffer();
 	void CreateSwapChain();
 	void CreateVertexIndexBuffers();
 	void UpdateViewport();
