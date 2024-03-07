@@ -3,6 +3,7 @@
 #include "MeshComponent.h"
 #include "Camera.h"
 #include "Strsafe.h"
+#include "Sphere.h"
 
 Game* Game::Instance = nullptr;
 
@@ -105,12 +106,23 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	auto mesh = RootComponent->GetChild<MeshComponent>(0);
 	mesh->camera = RootComponent->GetChild<Camera>(1);
 
-	RootComponent->AddChild(std::make_unique<MeshComponent>(vertices, indices));
+	RootComponent->AddChild(std::make_unique<MeshComponent>(
+		Sphere::GenerateSphereVertices(1.0, 12, 12),
+		Sphere::GenerateSphereIndices(12, 12)
+	));
 	mesh = RootComponent->GetChild<MeshComponent>(2);
 	mesh->SetGlobalPosition(Vector3(0, 0.5, 5));
 	mesh->SetColor(Vector4(0, 1, 1, 1));
 	mesh->camera = RootComponent->GetChild<Camera>(1);
 
+	RootComponent->AddChild(std::make_unique<MeshComponent>(
+		Sphere::GenerateSphereVertices(2.0, 12, 12),
+		Sphere::GenerateSphereIndices(12, 12)
+	));
+	mesh = RootComponent->GetChild<MeshComponent>(3);
+	mesh->SetGlobalPosition(Vector3(6, -0.7, 0));
+	mesh->SetColor(Vector4(0.2, 1, 0.4, 1));
+	mesh->camera = RootComponent->GetChild<Camera>(1);
 }
 
 Game::~Game() {

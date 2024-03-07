@@ -149,6 +149,7 @@
     <ClInclude Include="PhysicsServer.h" />
     <ClInclude Include="MeshComponent.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Sphere.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
