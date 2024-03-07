@@ -11,7 +11,7 @@ DirectX::XMMATRIX Camera::GetMatrix()
 	dx::XMMATRIX rotationMatrix = dx::XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
 
 	dx::XMMATRIX projection = isOrthographic ?
-		dx::XMMatrixPerspectiveLH(1.0f, 1.0f, 0.4f, 10.0f) : DirectX::XMMatrixOrthographicLH(10.0f, 10.0f, 0.4f, 10.0f);
+		dx::XMMatrixPerspectiveLH(1.0f, 1.0f, 0.4f, 20.0f) : DirectX::XMMatrixOrthographicLH(10.0f, 10.0f, 0.4f, 20.0f);
 
 
 	if (isOrbit) {

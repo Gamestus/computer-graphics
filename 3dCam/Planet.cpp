@@ -23,18 +23,26 @@ Planet::Planet()
     Initialize();
 }
 
+Planet::Planet(float size, Vector3 center, Vector4 color)
+{
+    PlanetColor = color;
+    orbitCenter = center;
+    PlanetSize = size;
+    Initialize();
+}
+
 void Planet::Update(float delta)
 {
-    RotateAroundPoint(2.0 * delta, Vector3(0, 1, 0));
+    RotateAroundPoint(Speed * delta, RotAxis);
 }
 
 void Planet::Initialize()
 {
     AddChild(std::make_unique<MeshComponent>(
-        Sphere::GenerateSphereVertices(0.5, 12, 12),
+        Sphere::GenerateSphereVertices(PlanetSize, 12, 12),
         Sphere::GenerateSphereIndices(12, 12)
     ));
     auto mesh = GetChild<MeshComponent>(0);
-    mesh->SetColor(Vector4(0.3, 0.6, 0.5, 1));
+    mesh->SetColor(PlanetColor);
     SetGlobalPosition(Vector3(0,0,9));
 }
