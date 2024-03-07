@@ -12,6 +12,9 @@ public:
 
 	void SetGlobalPosition(Vector3 pos);
 	void SetLocalPosition(Vector3 pos);
+	virtual void Update(float delta);
+	virtual void Initialize();
+	virtual void Draw();
 protected:
 	Vector3 globalPosition;
 	Vector3 localPosition;

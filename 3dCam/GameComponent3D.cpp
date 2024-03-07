@@ -21,6 +21,18 @@ void GameComponent3D::SetLocalPosition(Vector3 pos) {
 	UpdatePosition(globalPosition); //TODO
 }
 
+void GameComponent3D::Update(float delta)
+{
+}
+
+void GameComponent3D::Draw()
+{
+}
+
+void GameComponent3D::Initialize()
+{
+}
+
 void GameComponent3D::UpdatePosition(Vector3 parentGlobalPosition)
 {
 	globalPosition = parentGlobalPosition + localPosition;

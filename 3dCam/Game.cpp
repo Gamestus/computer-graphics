@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "Strsafe.h"
 #include "Sphere.h"
+#include "Planet.h"
 
 Game* Game::Instance = nullptr;
 
@@ -122,6 +123,11 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	mesh = RootComponent->GetChild<MeshComponent>(3);
 	mesh->SetGlobalPosition(Vector3(6, -0.7, 0));
 	mesh->SetColor(Vector4(0.2, 1, 0.4, 1));
+	mesh->camera = RootComponent->GetChild<Camera>(1);
+
+	RootComponent->AddChild(std::make_unique<Planet>());
+	auto planet = RootComponent->GetChild<Planet>(4);
+	mesh = planet->GetChild<MeshComponent>(0);
 	mesh->camera = RootComponent->GetChild<Camera>(1);
 }
 
