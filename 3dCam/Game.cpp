@@ -109,7 +109,7 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	RootComponent->AddChild(std::make_unique<Planet>(0.5, Vector3(0, 0, 0), Vector4(0.1, 0.7, 0.1, 0)));
 
 	auto planet = RootComponent->GetChild<Planet>(2);
-	planet->SetGlobalPosition(Vector3(4, 0, 0));
+	planet->SetLocalPosition(Vector3(4, 0, 0));
 	planet->RotAxis = Vector3(0, 1, 0);
 	planet->AddChild(std::make_unique<MeshComponent>(vertices, indices));
 	auto mesh = planet->GetChild<MeshComponent>(1);

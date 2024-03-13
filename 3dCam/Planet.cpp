@@ -4,18 +4,19 @@
 
 void Planet::RotateAroundPoint(float angle, Vector3 axis)
 {
+    return;
     dx::XMMATRIX translationToOrigin = dx::XMMatrixTranslation(-orbitCenter.x, -orbitCenter.y, -orbitCenter.z);
 
     dx::XMMATRIX rotationMatrix = dx::XMMatrixRotationAxis(dx::XMLoadFloat3(&axis), angle);
 
     dx::XMMATRIX translationFromOrigin = dx::XMMatrixTranslation(orbitCenter.x, orbitCenter.y, orbitCenter.z);
 
-    dx::XMFLOAT3 currentGlobalPosition = GetGlobalPosition();
-    dx::XMVECTOR currentPosition = dx::XMLoadFloat3(&currentGlobalPosition);
+    dx::XMFLOAT3 currentLocalPosition = GetLocalPosition();
+    dx::XMVECTOR currentPosition = dx::XMLoadFloat3(&currentLocalPosition);
 
     dx::XMMATRIX transformationMatrix = translationToOrigin * rotationMatrix * translationFromOrigin;
     currentPosition = dx::XMVector3TransformCoord(currentPosition, transformationMatrix);
-    SetGlobalPosition(currentPosition);
+    SetLocalPosition(currentPosition);
 }
 
 Planet::Planet()
@@ -44,5 +45,4 @@ void Planet::Initialize()
     ));
     auto mesh = GetChild<MeshComponent>(0);
     mesh->SetColor(PlanetColor);
-    SetGlobalPosition(Vector3(0,0,9));
 }

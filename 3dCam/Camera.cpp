@@ -28,7 +28,7 @@ DirectX::XMMATRIX Camera::GetMatrix()
 	else {
 		dx::XMVECTOR rotatedForwardVector = dx::XMVector3Transform(forwardVector, rotationMatrix);
 		matrix = dx::XMMatrixLookToLH(
-			dx::XMLoadFloat3(&globalPosition),
+			GetGlobalPosition(),
 			rotatedForwardVector,
 			dx::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
 	}
@@ -102,7 +102,7 @@ void Camera::Update(float delta) {
 	DirectX::XMFLOAT3 move;
 	DirectX::XMStoreFloat3(&move, moveVector);
 
-	globalPosition += move;
+	localPosition += move;
 
 	clampedValue = distance - moveInput.z * delta * moveSpeed;
 	if (clampedValue < 0.2)
@@ -114,13 +114,13 @@ void Camera::Update(float delta) {
 	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D1))) {
 		distance = 5.0f;
 		rotation = Vector3(0, 0, 0);
-		globalPosition = Vector3(0, 0, distance);
+		localPosition = Vector3(0, 0, distance);
 		isOrbit = true;
 	}
 	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D2))) {
 		distance = 5.0f;
 		rotation = Vector3(0, 0, 0);
-		globalPosition = Vector3(0, 0, -distance);
+		localPosition = Vector3(0, 0, -distance);
 		isOrbit = false;
 	}
 	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D3))) {

@@ -3,7 +3,7 @@
 
 Vector3 GameComponent3D::GetGlobalPosition()
 {
-	return globalPosition;
+	return GetGlobalTransform().r[3];
 }
 
 Vector3 GameComponent3D::GetLocalPosition()
@@ -11,14 +11,8 @@ Vector3 GameComponent3D::GetLocalPosition()
 	return localPosition;
 }
 
-void GameComponent3D::SetGlobalPosition(Vector3 pos) {
-	globalPosition = pos;
-	UpdatePosition(globalPosition); //TODO
-}
-
 void GameComponent3D::SetLocalPosition(Vector3 pos) {
 	localPosition = pos;
-	UpdatePosition(globalPosition); //TODO
 }
 
 void GameComponent3D::Update(float delta)
@@ -29,17 +23,27 @@ void GameComponent3D::Draw()
 {
 }
 
-void GameComponent3D::Initialize()
+dx::XMMATRIX GameComponent3D::GetLocalTransform()
 {
+	dx::XMMATRIX translationMatrix = dx::XMMatrixTranslation(localPosition.x, localPosition.y, localPosition.z);
+	dx::XMMATRIX rotationMatrix = dx::XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
+	dx::XMMATRIX scaleMatrix = dx::XMMatrixScaling(scale.x, scale.y, scale.z);
+
+	return scaleMatrix * rotationMatrix * translationMatrix;
 }
 
-void GameComponent3D::UpdatePosition(Vector3 parentGlobalPosition)
+dx::XMMATRIX GameComponent3D::GetGlobalTransform()
 {
-	globalPosition = parentGlobalPosition + localPosition;
-	for (auto& child : children) {
-		GameComponent3D* component3D = dynamic_cast<GameComponent3D*>(child.get());
-		if (component3D) {
-			component3D->UpdatePosition(globalPosition);
-		}
+	dx::XMMATRIX parentTransform = dx::XMMatrixIdentity();
+
+	if (auto parentComponent = dynamic_cast<GameComponent3D*>(parent.get()))
+	{
+		parentTransform = parentComponent->GetGlobalTransform();
 	}
+
+	return parentTransform * GetLocalTransform();
+}
+
+void GameComponent3D::Initialize()
+{
 }
