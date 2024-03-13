@@ -3,6 +3,7 @@
 #include "Game.h"
 
 using namespace DirectX::SimpleMath;
+namespace dx = DirectX;
 
 class GameComponent
 {

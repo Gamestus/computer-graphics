@@ -2,39 +2,20 @@
 #include "MeshComponent.h"
 #include "Sphere.h"
 
-void Planet::RotateAroundPoint(float angle, Vector3 axis)
-{
-    return;
-    dx::XMMATRIX translationToOrigin = dx::XMMatrixTranslation(-orbitCenter.x, -orbitCenter.y, -orbitCenter.z);
-
-    dx::XMMATRIX rotationMatrix = dx::XMMatrixRotationAxis(dx::XMLoadFloat3(&axis), angle);
-
-    dx::XMMATRIX translationFromOrigin = dx::XMMatrixTranslation(orbitCenter.x, orbitCenter.y, orbitCenter.z);
-
-    dx::XMFLOAT3 currentLocalPosition = GetLocalPosition();
-    dx::XMVECTOR currentPosition = dx::XMLoadFloat3(&currentLocalPosition);
-
-    dx::XMMATRIX transformationMatrix = translationToOrigin * rotationMatrix * translationFromOrigin;
-    currentPosition = dx::XMVector3TransformCoord(currentPosition, transformationMatrix);
-    SetLocalPosition(currentPosition);
-}
-
 Planet::Planet()
 {
     Initialize();
 }
 
-Planet::Planet(float size, Vector3 center, Vector4 color)
+Planet::Planet(float size, Vector4 color)
 {
     PlanetColor = color;
-    orbitCenter = center;
     PlanetSize = size;
     Initialize();
 }
 
 void Planet::Update(float delta)
 {
-    RotateAroundPoint(Speed * delta, RotAxis);
 }
 
 void Planet::Initialize()

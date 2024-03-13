@@ -150,6 +150,7 @@
     <ClInclude Include="MeshComponent.h" />
     <ClInclude Include="Planet.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Rotator.h" />
     <ClInclude Include="Sphere.h" />
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +166,7 @@
     <ClCompile Include="PhysicsServer.cpp" />
     <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="Planet.cpp" />
+    <ClCompile Include="Rotator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

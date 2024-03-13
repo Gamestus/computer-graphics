@@ -5,6 +5,7 @@
 #include "Strsafe.h"
 #include "Sphere.h"
 #include "Planet.h"
+#include "Rotator.h"
 
 Game* Game::Instance = nullptr;
 
@@ -101,19 +102,40 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 		0, 1, 4,  1, 5, 4
 	};
 
+	// Add camera
 	RootComponent->AddChild(std::make_unique<Camera>());
 	CurrCam = RootComponent->GetChild<Camera>(0);
 
+	// Add origin Cube
 	RootComponent->AddChild(std::make_unique<MeshComponent>(vertices, indices));
 
-	RootComponent->AddChild(std::make_unique<Planet>(0.5, Vector3(0, 0, 0), Vector4(0.1, 0.7, 0.1, 0)));
+	// Add Rotator to Origin
+	RootComponent->AddChild(std::make_unique<Rotator>());
 
-	auto planet = RootComponent->GetChild<Planet>(2);
+	auto rotator = RootComponent->GetChild<Rotator>(2);
+
+	// Add Green Planet
+	rotator->AddChild(std::make_unique<Planet>(0.5, Vector4(0.1, 0.7, 0.1, 0)));
+
+	auto planet = rotator->GetChild<Planet>(0);
 	planet->SetLocalPosition(Vector3(4, 0, 0));
-	planet->RotAxis = Vector3(0, 1, 0);
-	planet->AddChild(std::make_unique<MeshComponent>(vertices, indices));
-	auto mesh = planet->GetChild<MeshComponent>(1);
-	mesh->SetLocalPosition(Vector3(0, -4, 0));
+
+	// Add Rotator to Green Planet
+	planet->AddChild(std::make_unique<Rotator>());
+	rotator = planet->GetChild<Rotator>(1);
+	// Add Moon to Green Planet's rotator
+	rotator->AddChild(std::make_unique<Planet>(0.35, Vector4(0.5, 0.5, 0.5, 0)));
+
+	planet = rotator->GetChild<Planet>(0);
+	planet->SetLocalPosition(Vector3(2, 0, 0));
+
+
+	/*planet->AddChild(std::make_unique<Planet>(0.7, Vector3(0, 0, 0), Vector4(0.5, 0.2, 0.1, 0)));
+	planet = planet->GetChild<Planet>(1);
+	planet->SetLocalPosition(Vector3(1, 0, 0));*/
+	//planet->AddChild(std::make_unique<MeshComponent>(vertices, indices));
+
+	//auto mesh = planet->GetChild<MeshComponent>(1);
 }
 
 Game::~Game() {

@@ -11,6 +11,11 @@ Vector3 GameComponent3D::GetLocalPosition()
 	return localPosition;
 }
 
+Vector3 GameComponent3D::GetRotation()
+{
+	return rotation;
+}
+
 void GameComponent3D::SetLocalPosition(Vector3 pos) {
 	localPosition = pos;
 }
@@ -41,7 +46,7 @@ dx::XMMATRIX GameComponent3D::GetGlobalTransform()
 		parentTransform = parentComponent->GetGlobalTransform();
 	}
 
-	return parentTransform * GetLocalTransform();
+	return GetLocalTransform() * parentTransform;
 }
 
 void GameComponent3D::Initialize()

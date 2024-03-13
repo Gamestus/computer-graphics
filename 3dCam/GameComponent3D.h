@@ -1,14 +1,13 @@
 #pragma once
 #include "GameComponent.h"
 
-namespace dx = DirectX;
-
 class GameComponent3D :
     public GameComponent
 {
 public:
 	Vector3 GetGlobalPosition();
 	Vector3 GetLocalPosition();
+	Vector3 GetRotation();
 
 	void SetLocalPosition(Vector3 pos);
 
