@@ -103,30 +103,23 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	};
 
 	// Add camera
-	RootComponent->AddChild(std::make_unique<Camera>());
+	RootComponent->AddChild<Camera>(std::make_unique<Camera>());
 	CurrCam = RootComponent->GetChild<Camera>(0);
 
 	// Add origin Cube
-	RootComponent->AddChild(std::make_unique<MeshComponent>(vertices, indices));
-
+	RootComponent->AddChild<MeshComponent>(std::make_unique<MeshComponent>(vertices, indices));
 	// Add Rotator to Origin
-	RootComponent->AddChild(std::make_unique<Rotator>());
+	auto rotator = RootComponent->AddChild<Rotator>(std::make_unique<Rotator>());
 
-	auto rotator = RootComponent->GetChild<Rotator>(2);
 
 	// Add Green Planet
-	rotator->AddChild(std::make_unique<Planet>(0.5, Vector4(0.1, 0.7, 0.1, 0)));
-
-	auto planet = rotator->GetChild<Planet>(0);
+	auto planet = rotator->AddChild<Planet>(std::make_unique<Planet>(0.5, Vector4(0.1, 0.7, 0.1, 0)));
 	planet->SetLocalPosition(Vector3(4, 0, 0));
 
 	// Add Rotator to Green Planet
-	planet->AddChild(std::make_unique<Rotator>());
-	rotator = planet->GetChild<Rotator>(1);
+	rotator = planet->AddChild<Rotator>(std::make_unique<Rotator>());
 	// Add Moon to Green Planet's rotator
-	rotator->AddChild(std::make_unique<Planet>(0.35, Vector4(0.5, 0.5, 0.5, 0)));
-
-	planet = rotator->GetChild<Planet>(0);
+	planet = rotator->AddChild<Planet>(std::make_unique<Planet>(0.35, Vector4(0.5, 0.5, 0.5, 0)));
 	planet->SetLocalPosition(Vector3(2, 0, 0));
 
 

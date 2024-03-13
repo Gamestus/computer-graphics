@@ -15,7 +15,17 @@ public:
 
 	void DrawChildren();
 	void UpdateChildren(float delta);
-	virtual void AddChild(std::unique_ptr<GameComponent> child);
+
+	template<typename T>
+	T* AddChild(std::unique_ptr<GameComponent> child)
+	{
+		static_assert(std::is_base_of<GameComponent, T>::value,
+			"T must be a GameComponent derived class!");
+
+		child->parent.reset(this);
+		children.push_back(std::move(child));
+		return dynamic_cast<T*>(children.back().get());
+	}
 
 	template<typename T>
 	T* GetChild(int index)

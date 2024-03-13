@@ -20,7 +20,7 @@ void Planet::Update(float delta)
 
 void Planet::Initialize()
 {
-    AddChild(std::make_unique<MeshComponent>(
+    AddChild<MeshComponent>(std::make_unique<MeshComponent>(
         Sphere::GenerateSphereVertices(PlanetSize, 12, 12),
         Sphere::GenerateSphereIndices(12, 12)
     ));
