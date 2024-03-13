@@ -16,6 +16,7 @@ void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 	
 	game = Game::Instance;
 	indices = nIndices;
+	camera = game->CurrCam;
 
 	ID3DBlob* errorVertexCode = nullptr;
 	auto res = D3DCompileFromFile(ShaderFile,

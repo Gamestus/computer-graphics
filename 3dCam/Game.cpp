@@ -101,59 +101,19 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 		0, 1, 4,  1, 5, 4
 	};
 
-	RootComponent->AddChild(std::make_unique<MeshComponent>(vertices, indices));
 	RootComponent->AddChild(std::make_unique<Camera>());
+	CurrCam = RootComponent->GetChild<Camera>(0);
 
-	auto mesh = RootComponent->GetChild<MeshComponent>(0);
-	mesh->camera = RootComponent->GetChild<Camera>(1);
-
-	RootComponent->AddChild(std::make_unique<MeshComponent>(
-		Sphere::GenerateSphereVertices(1.0, 12, 12),
-		Sphere::GenerateSphereIndices(12, 12)
-	));
-	mesh = RootComponent->GetChild<MeshComponent>(2);
-	mesh->SetGlobalPosition(Vector3(0, 0.5, 5));
-	mesh->SetColor(Vector4(0, 1, 1, 1));
-	mesh->camera = RootComponent->GetChild<Camera>(1);
-
-	RootComponent->AddChild(std::make_unique<MeshComponent>(
-		Sphere::GenerateSphereVertices(2.0, 12, 12),
-		Sphere::GenerateSphereIndices(12, 12)
-	));
-	mesh = RootComponent->GetChild<MeshComponent>(3);
-	mesh->SetGlobalPosition(Vector3(9, -0.7, 0));
-	mesh->SetColor(Vector4(0.2, 1, 0.4, 1));
-	mesh->camera = RootComponent->GetChild<Camera>(1);
+	RootComponent->AddChild(std::make_unique<MeshComponent>(vertices, indices));
 
 	RootComponent->AddChild(std::make_unique<Planet>(0.5, Vector3(0, 0, 0), Vector4(0.1, 0.7, 0.1, 0)));
-	auto planet = RootComponent->GetChild<Planet>(4);
-	planet->SetGlobalPosition(Vector3(7, 0, 0));
-	planet->RotAxis = Vector3(0.2, 1, 0);
-	mesh = planet->GetChild<MeshComponent>(0);
-	mesh->camera = RootComponent->GetChild<Camera>(1);
 
-	RootComponent->AddChild(std::make_unique<Planet>(0.9, Vector3(0, 0, 0), Vector4(0.9, 0.8, 0.5, 0)));
-	planet = RootComponent->GetChild<Planet>(5);
-	planet->SetGlobalPosition(Vector3(0, -4, 2));
-	planet->RotAxis = Vector3(0.2, 0.2, 0.6);
-	mesh = planet->GetChild<MeshComponent>(0);
-	mesh->camera = RootComponent->GetChild<Camera>(1);
-
-	RootComponent->AddChild(std::make_unique<Planet>(0.6, Vector3(9, -0.7, 0), Vector4(0.4, 0.8, 0.7, 0)));
-	planet = RootComponent->GetChild<Planet>(6);
-	planet->SetGlobalPosition(Vector3(9, -0.7, 3));
+	auto planet = RootComponent->GetChild<Planet>(2);
+	planet->SetGlobalPosition(Vector3(4, 0, 0));
 	planet->RotAxis = Vector3(0, 1, 0);
-	planet->Speed = -1.5;
-	mesh = planet->GetChild<MeshComponent>(0);
-	mesh->camera = RootComponent->GetChild<Camera>(1);
-
-	RootComponent->AddChild(std::make_unique<Planet>(0.5, Vector3(0, 0, 0), Vector4(0.4, 0.8, 0.7, 0)));
-	planet = RootComponent->GetChild<Planet>(7);
-	planet->SetGlobalPosition(Vector3(2, 4, 0));
-	planet->RotAxis = Vector3(0, 0.5, 0.5);
-	planet->Speed = -3;
-	mesh = planet->GetChild<MeshComponent>(0);
-	mesh->camera = RootComponent->GetChild<Camera>(1);
+	planet->AddChild(std::make_unique<MeshComponent>(vertices, indices));
+	auto mesh = planet->GetChild<MeshComponent>(1);
+	mesh->SetLocalPosition(Vector3(0, -4, 0));
 }
 
 Game::~Game() {

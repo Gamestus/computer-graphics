@@ -18,6 +18,7 @@
 #pragma comment(lib, "dxguid.lib")
 
 class GameComponent;
+class Camera;
 
 class Game
 {
@@ -34,7 +35,7 @@ public:
 	Microsoft::WRL::ComPtr<ID3D11Device> WrlDevice;
 	ID3D11DepthStencilView* DSView;
 
-
+	Camera* CurrCam;
 	PhysicsServer* PhysServer;
 
 	int p1Score = 0;
