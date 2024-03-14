@@ -118,10 +118,41 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 
 	// Add Rotator to Green Planet
 	rotator = planet->AddChild<Rotator>(std::make_unique<Rotator>());
+	rotator->RotAxis = Vector3(0, 0.5, 1);
+	rotator->Speed = -3.0;
 	// Add Moon to Green Planet's rotator
 	planet = rotator->AddChild<Planet>(std::make_unique<Planet>(0.35, Vector4(0.5, 0.5, 0.5, 0)));
 	planet->SetLocalPosition(Vector3(2, 0, 0));
 
+	planet = rotator->AddChild<Planet>(std::make_unique<Planet>(0.2, Vector4(0.9, 0.3, 0.4, 0)));
+	planet->SetLocalPosition(Vector3(-1, 0, 0));
+
+	// Add Rotator2 to Origin
+	rotator = RootComponent->AddChild<Rotator>(std::make_unique<Rotator>());
+	rotator->Speed = -6.0;
+	rotator->RotAxis = Vector3(0, 0.2, 1);
+
+	// Add RED Planet
+	planet = rotator->AddChild<Planet>(std::make_unique<Planet>(0.9, Vector4(0.8, 0.15, 0.1, 0)));
+	planet->SetLocalPosition(Vector3(8, 0, 0));
+	rotator = planet->AddChild<Rotator>(std::make_unique<Rotator>());
+	rotator->RotAxis = Vector3(0, -0.5, 1);
+	rotator->Speed = -2.5;
+	planet = rotator->AddChild<Planet>(std::make_unique<Planet>(0.3, Vector4(0.6, 0.3, 0.4, 0)));
+	planet->SetLocalPosition(Vector3(2, 0, 0));
+	planet = rotator->AddChild<Planet>(std::make_unique<Planet>(0.1, Vector4(0.6, 0.2, 0.5, 0)));
+	planet->SetLocalPosition(Vector3(2, 3, 0));
+
+	// Add Rotator3 to Origin
+	rotator = RootComponent->AddChild<Rotator>(std::make_unique<Rotator>());
+	rotator->Speed = -1.0;
+	rotator->RotAxis = Vector3(1, 0, 0);
+
+	rotator->SetLocalPosition(Vector3(2, 0, 0));
+
+	// Add Blue Planet
+	planet = rotator->AddChild<Planet>(std::make_unique<Planet>(0.9, Vector4(0.4, 0.2, 0.9, 0)));
+	planet->SetLocalPosition(Vector3(0, 2, 0));
 
 	/*planet->AddChild(std::make_unique<Planet>(0.7, Vector3(0, 0, 0), Vector4(0.5, 0.2, 0.1, 0)));
 	planet = planet->GetChild<Planet>(1);
