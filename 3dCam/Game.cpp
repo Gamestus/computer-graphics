@@ -7,6 +7,10 @@
 #include "Planet.h"
 #include "Rotator.h"
 #include "FlexingCube.h"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 
 Game* Game::Instance = nullptr;
 
