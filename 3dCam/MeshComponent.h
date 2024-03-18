@@ -14,6 +14,7 @@ class MeshComponent :
 {
 public:
 	MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, const std::vector<int>& nIndices);
+	MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, const std::vector<int>& nIndices, LPCWSTR Shader);
 	~MeshComponent();
 	void Initialize(const std::vector<int>& nIndices);
 	void Draw();
@@ -25,8 +26,8 @@ public:
 	LPCWSTR ShaderFile = L"./Shaders/ShaderConstBuf.hlsl";
 
 	Camera* camera;
-private:
 
+protected:
 
 	struct ConstData {
 		dx::XMMATRIX transform;
@@ -40,7 +41,7 @@ private:
 		),
 		//Vector4(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f),
 		Vector4(0.9f, 0.6f, 0.6f, 1.0f) };
-
+private:
 	ID3D11Buffer* constantBuffer;
 
 	ID3D11InputLayout* layout;

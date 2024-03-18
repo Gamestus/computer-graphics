@@ -8,6 +8,14 @@ MeshComponent::MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, co
 	Initialize(nIndices);
 }
 
+MeshComponent::MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, const std::vector<int>& nIndices, LPCWSTR Shader) {
+
+	points = newPoints;
+	ShaderFile = Shader;
+	Initialize(nIndices);
+}
+
+
 MeshComponent::~MeshComponent() {
 }
 

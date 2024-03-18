@@ -6,6 +6,7 @@
 #include "Sphere.h"
 #include "Planet.h"
 #include "Rotator.h"
+#include "FlexingCube.h"
 
 Game* Game::Instance = nullptr;
 
@@ -74,40 +75,14 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	UpdateViewport();
 
 	RootComponent = new GameComponent();
-	std::vector<DirectX::XMFLOAT4> vertices = {
-	{-1.0f, -1.0f, -1.0f, 1.0f},
-	{-1.0f, -1.0f, -1.0f, 1.0f},
-	{1.0f, -1.0f, -1.0f, 1.0f},
-	{1.0f, -1.0f, -1.0f, 1.0f},
-	{-1.0f, 1.0f, -1.0f, 1.0f},
-	{-1.0f, 1.0f, -1.0f, 1.0f},
-	{1.0f, 1.0f, -1.0f, 1.0f},
-	{1.0f, 1.0f, -1.0f, 1.0f},
-	{-1.0f, -1.0f, 1.0f, 1.0f},
-	{-1.0f, -1.0f, 1.0f, 1.0f},
-	{1.0f, -1.0f, 1.0f, 1.0f},
-	{1.0f, -1.0f, 1.0f, 1.0f},
-	{-1.0f, 1.0f, 1.0f, 1.0f},
-	{-1.0f, 1.0f, 1.0f, 1.0f},
-	{1.0f, 1.0f, 1.0f, 1.0f},
-	{1.0f, 1.0f, 1.0f, 1.0f}
-	};
 
-	std::vector<int> indices = {
-		0, 2, 1,  2, 3, 1,
-		1, 3, 5,  3, 7, 5,
-		2, 6, 3,  3, 6, 7,
-		4, 5, 7,  4, 7, 6,
-		0, 4, 2,  2, 4, 6,
-		0, 1, 4,  1, 5, 4
-	};
 
 	// Add camera
 	RootComponent->AddChild<Camera>(std::make_unique<Camera>());
 	CurrCam = RootComponent->GetChild<Camera>(0);
 
 	// Add origin Cube
-	RootComponent->AddChild<MeshComponent>(std::make_unique<MeshComponent>(vertices, indices));
+	RootComponent->AddChild<MeshComponent>(std::make_unique<FlexingCube>());
 	// Add Rotator to Origin
 	auto rotator = RootComponent->AddChild<Rotator>(std::make_unique<Rotator>());
 
@@ -129,7 +104,7 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 
 	// Add Rotator2 to Origin
 	rotator = RootComponent->AddChild<Rotator>(std::make_unique<Rotator>());
-	rotator->Speed = -6.0;
+	rotator->Speed = -3.0;
 	rotator->RotAxis = Vector3(0, 0.2, 1);
 
 	// Add RED Planet
