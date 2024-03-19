@@ -8,6 +8,7 @@ AssimpMesh::AssimpMesh(std::string filepath)
 
 AssimpMesh::AssimpMesh(std::string filepath, float importScale)
 {
+	ShaderFile = L"./Shaders/ShaderTexture.hlsl";
 
 	Assimp::Importer importer;
 	unsigned int flags = aiProcess_Triangulate | aiProcess_JoinIdenticalVertices;
