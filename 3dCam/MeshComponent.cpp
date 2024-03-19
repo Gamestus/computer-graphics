@@ -2,6 +2,10 @@
 #include <chrono>
 
 
+MeshComponent::MeshComponent()
+{
+}
+
 MeshComponent::MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, const std::vector<int>& nIndices) {
 
 	points = newPoints;
@@ -15,10 +19,9 @@ MeshComponent::MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, co
 	Initialize(nIndices);
 }
 
-
-MeshComponent::~MeshComponent() {
+MeshComponent::~MeshComponent()
+{
 }
-
 
 void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 	
@@ -136,7 +139,7 @@ void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 }
 
 void MeshComponent::Draw() {
-	UINT strides[] = { 32 };
+	UINT strides[] = { sizeof(DirectX::XMFLOAT4) };
 	UINT offsets[] = { 0 };
 
 	//data.offset = Vector4(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f);

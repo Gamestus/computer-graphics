@@ -7,9 +7,7 @@
 #include "Planet.h"
 #include "Rotator.h"
 #include "FlexingCube.h"
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+#include "AssimpMesh.h"
 
 
 Game* Game::Instance = nullptr;
@@ -86,7 +84,7 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	CurrCam = RootComponent->GetChild<Camera>(0);
 
 	// Add origin Cube
-	RootComponent->AddChild<MeshComponent>(std::make_unique<FlexingCube>());
+	RootComponent->AddChild<AssimpMesh>(std::make_unique<AssimpMesh>("models\\UV_sphere.obj"));
 	// Add Rotator to Origin
 	auto rotator = RootComponent->AddChild<Rotator>(std::make_unique<Rotator>());
 

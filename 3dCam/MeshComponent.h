@@ -13,6 +13,7 @@ class MeshComponent :
     public GameComponent3D
 {
 public:
+	MeshComponent();
 	MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, const std::vector<int>& nIndices);
 	MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, const std::vector<int>& nIndices, LPCWSTR Shader);
 	~MeshComponent();
@@ -41,6 +42,9 @@ protected:
 		),
 		//Vector4(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f),
 		Vector4(0.9f, 0.6f, 0.6f, 1.0f) };
+protected:
+	std::vector<DirectX::XMFLOAT4> points;
+	std::vector<int> indices;
 private:
 	ID3D11Buffer* constantBuffer;
 
@@ -55,8 +59,6 @@ private:
 	ID3D11Buffer* vertexBuffer;
 	ID3D11Buffer* indexBuffer;
 
-    std::vector<DirectX::XMFLOAT4> points;
-    std::vector<int> indices;
 	ID3D11RasterizerState* rastState;
 
 	void SetupConstBuffer();

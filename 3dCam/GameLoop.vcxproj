@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AssimpMesh.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CollisionRect.h" />
     <ClInclude Include="DisplayWin32.h" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Sphere.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AssimpMesh.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionRect.cpp" />
     <ClCompile Include="DisplayWin32.cpp" />
