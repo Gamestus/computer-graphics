@@ -30,7 +30,8 @@ AssimpMesh::AssimpMesh(std::string filepath, float importScale)
 				1.0f,
 				1.0f,
 				1.0f,
-				1.0f
+				pMesh->mTextureCoords[0][i].x,
+				1.0f - pMesh->mTextureCoords[0][i].y
 				)
 			);
 	}

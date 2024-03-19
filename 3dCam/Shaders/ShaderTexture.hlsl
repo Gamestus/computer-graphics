@@ -25,12 +25,12 @@ cbuffer ConstBuf : register(b0) {
 	ConstantData ConstData;
 }
 
-PS_IN VSMain(VS_IN input, uint vId : SV_VertexID, float2 UV : TEXCOORD)
+PS_IN VSMain(VS_IN input, uint vId : SV_VertexID)
 {
 	PS_IN output = (PS_IN) 0;
 	
 	output.pos = mul(input.pos,ConstData.transform);
-	output.UV = UV;
+	output.UV = input.UV;
 	output.col = ConstData.color;
 	
 	return output;

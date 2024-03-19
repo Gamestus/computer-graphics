@@ -10,7 +10,7 @@ MeshComponent::MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, co
 	points.reserve(newPoints.size());
 	for(int i = 0; i < newPoints.size(); i++)
 	{
-		points.push_back(Vertex(newPoints[i].x, newPoints[i].y, newPoints[i].z, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
+		points.push_back(Vertex(newPoints[i].x, newPoints[i].y, newPoints[i].z, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
 	}
 	Initialize(nIndices);
 }
@@ -20,7 +20,7 @@ MeshComponent::MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, co
 	points.reserve(newPoints.size());
 	for (int i = 0; i < newPoints.size(); i++)
 	{
-		points.push_back(Vertex(newPoints[i].x, newPoints[i].y, newPoints[i].z, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
+		points.push_back(Vertex(newPoints[i].x, newPoints[i].y, newPoints[i].z, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
 	}
 	ShaderFile = Shader;
 	Initialize(nIndices);
@@ -92,7 +92,7 @@ void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 			0,
 			DXGI_FORMAT_R32G32_FLOAT,
 			0,
-			12,
+			D3D11_APPEND_ALIGNED_ELEMENT,
 			D3D11_INPUT_PER_VERTEX_DATA,
 			0}
 	};
@@ -168,7 +168,7 @@ void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 
 	//texture
 
-	HRESULT hr = dx::CreateWICTextureFromFile(game->WrlDevice.Get(), L"textures\\wolf.jpg", nullptr, &Texture);
+	HRESULT hr = dx::CreateWICTextureFromFile(game->WrlDevice.Get(), L"textures\\saul.jpg", nullptr, &Texture);
 }
 
 void MeshComponent::Draw() {
