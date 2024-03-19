@@ -36,8 +36,8 @@ PS_IN VSMain(VS_IN input, uint vId : SV_VertexID, float2 UV : TEXCOORD)
 	return output;
 }
 
-float4 PSMain( PS_IN input ) : SV_TARGET
+float4 PSMain( PS_IN input ) : SV_Target
 {
-	float4 col = DiffuseMap.Sample(Sampler, input.UV);
+	float4 col = DiffuseMap.Sample(Sampler, input.UV) * input.col;
 	return col;
 }

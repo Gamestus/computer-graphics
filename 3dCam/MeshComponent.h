@@ -25,10 +25,10 @@ public:
 	float totalTime = 0;
 	unsigned int frameCount = 0;
 	LPCWSTR ShaderFile = L"./Shaders/ShaderConstBuf.hlsl";
-
 	Camera* camera;
 
 protected:
+	ID3D11ShaderResourceView* Texture;
 
 	struct ConstData {
 		dx::XMMATRIX transform;
@@ -41,7 +41,7 @@ protected:
 				dx::XMMatrixPerspectiveLH(1.0f, 1.0f ,0.1f, 10.0f)
 		),
 		//Vector4(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f),
-		Vector4(0.9f, 0.6f, 0.6f, 1.0f) };
+		Vector4(1.0f, 1.0f, 1.0f, 1.0f) };
 protected:
 	std::vector<DirectX::XMFLOAT4> points;
 	std::vector<int> indices;
@@ -60,6 +60,8 @@ private:
 	ID3D11Buffer* indexBuffer;
 
 	ID3D11RasterizerState* rastState;
+
+	ID3D11SamplerState* pSamplerState;
 
 	void SetupConstBuffer();
 };

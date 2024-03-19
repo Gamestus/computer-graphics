@@ -1,6 +1,6 @@
 #include "MeshComponent.h"
 #include <chrono>
-
+#include <WICTextureLoader.h>
 
 MeshComponent::MeshComponent()
 {
@@ -79,13 +79,21 @@ void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 			0,
 			D3D11_APPEND_ALIGNED_ELEMENT,
 			D3D11_INPUT_PER_VERTEX_DATA,
+			0},
+		D3D11_INPUT_ELEMENT_DESC {
+			"TEXCOORD",
+			0,
+			DXGI_FORMAT_R32G32_FLOAT,
+			0,
+			12,
+			D3D11_INPUT_PER_VERTEX_DATA,
 			0}
 	};
 
 
 	game->WrlDevice->CreateInputLayout(
 		inputElements,
-		2,
+		3,
 		vertexShaderByteCode->GetBufferPointer(),
 		vertexShaderByteCode->GetBufferSize(),
 		&layout);
@@ -135,7 +143,25 @@ void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 
 	SetupConstBuffer();
 
-	
+	//CreateSamplerState
+	D3D11_SAMPLER_DESC samplerDesc = {};
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	samplerDesc.BorderColor[0] = 1.0f;
+	samplerDesc.BorderColor[1] = 0.0f;
+	samplerDesc.BorderColor[2] = 0.0f;
+	samplerDesc.BorderColor[3] = 1.0f;
+
+	samplerDesc.MaxLOD = INT_MAX;
+
+	game->WrlDevice->CreateSamplerState(&samplerDesc, &pSamplerState);
+
+	//texture
+
+	HRESULT hr = dx::CreateWICTextureFromFile(game->WrlDevice.Get(), L"textures\\wolf.jpg", nullptr, &Texture);
 }
 
 void MeshComponent::Draw() {
@@ -149,6 +175,8 @@ void MeshComponent::Draw() {
 	);
 
 	game->DeviceContext->RSSetState(rastState);
+	game->DeviceContext->PSSetShaderResources(0, 1, &Texture);
+	game->DeviceContext->PSSetSamplers(0, 1, &pSamplerState);
 
 
 	//setup IA

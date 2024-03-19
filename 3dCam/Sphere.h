@@ -22,7 +22,6 @@ public:
                 float z = radius * sinf(phi) * sinf(theta);
 
                 vertices.emplace_back(x, y, z, 1.0f);
-                vertices.emplace_back(x, y, z, 1.0f);
             }
         }
 
