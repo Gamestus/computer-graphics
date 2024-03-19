@@ -7,14 +7,21 @@ MeshComponent::MeshComponent()
 }
 
 MeshComponent::MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, const std::vector<int>& nIndices) {
-
-	points = newPoints;
+	points.reserve(newPoints.size());
+	for(int i = 0; i < newPoints.size(); i++)
+	{
+		points.push_back(Vertex(newPoints[i].x, newPoints[i].y, newPoints[i].z, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
+	}
 	Initialize(nIndices);
 }
 
 MeshComponent::MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, const std::vector<int>& nIndices, LPCWSTR Shader) {
 
-	points = newPoints;
+	points.reserve(newPoints.size());
+	for (int i = 0; i < newPoints.size(); i++)
+	{
+		points.push_back(Vertex(newPoints[i].x, newPoints[i].y, newPoints[i].z, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f));
+	}
 	ShaderFile = Shader;
 	Initialize(nIndices);
 }
@@ -107,7 +114,7 @@ void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 	vertexBufDesc.CPUAccessFlags = 0;
 	vertexBufDesc.MiscFlags = 0;
 	vertexBufDesc.StructureByteStride = 0;
-	vertexBufDesc.ByteWidth = sizeof(DirectX::XMFLOAT4) * points.size();
+	vertexBufDesc.ByteWidth = sizeof(Vertex) * points.size();
 
 	D3D11_SUBRESOURCE_DATA vertexData = {};
 	vertexData.pSysMem = points.data();
@@ -165,7 +172,7 @@ void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 }
 
 void MeshComponent::Draw() {
-	UINT strides[] = { sizeof(DirectX::XMFLOAT4) };
+	UINT strides[] = { sizeof(Vertex) };
 	UINT offsets[] = { 0 };
 
 	//data.offset = Vector4(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f);

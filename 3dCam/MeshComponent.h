@@ -6,6 +6,7 @@
 #include <d3d11.h>
 
 #include "SimpleMath.h"
+#include "Vertex.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -43,7 +44,7 @@ protected:
 		//Vector4(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f),
 		Vector4(1.0f, 1.0f, 1.0f, 1.0f) };
 protected:
-	std::vector<DirectX::XMFLOAT4> points;
+	std::vector<Vertex> points;
 	std::vector<int> indices;
 private:
 	ID3D11Buffer* constantBuffer;

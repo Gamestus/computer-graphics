@@ -156,6 +156,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Rotator.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssimpMesh.cpp" />
@@ -173,6 +174,7 @@
     <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="Planet.cpp" />
     <ClCompile Include="Rotator.cpp" />
+    <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

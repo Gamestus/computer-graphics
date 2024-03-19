@@ -16,15 +16,20 @@ AssimpMesh::AssimpMesh(std::string filepath, float importScale)
 	
 	const auto pMesh = pScene->mMeshes[0];
 
-	std::vector<dx::XMFLOAT4> vertices;
+	std::vector<Vertex> vertices;
 	vertices.reserve(pMesh->mNumVertices);
 
 	for (int i = 0; i < pMesh->mNumVertices; i++)
 	{
 		vertices.push_back(
-			dx::XMFLOAT4(pMesh->mVertices[i].x,
+			Vertex(pMesh->mVertices[i].x,
 				pMesh->mVertices[i].y,
 				pMesh->mVertices[i].z,
+				1.0f,
+				1.0f,
+				1.0f,
+				1.0f,
+				1.0f,
 				1.0f
 				)
 			);
