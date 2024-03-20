@@ -19,6 +19,8 @@ AssimpMesh::AssimpMesh(std::string filepath, float importScale)
 	std::vector<Vertex> vertices;
 	vertices.reserve(pMesh->mNumVertices);
 
+	bool hasUV = pMesh->HasTextureCoords(0);
+
 	for (int i = 0; i < pMesh->mNumVertices; i++)
 	{
 		vertices.push_back(
@@ -30,8 +32,8 @@ AssimpMesh::AssimpMesh(std::string filepath, float importScale)
 				1.0f,
 				1.0f,
 				1.0f,
-				pMesh->mTextureCoords[0][i].x,
-				1.0f - pMesh->mTextureCoords[0][i].y
+				hasUV ? pMesh->mTextureCoords[0][i].x : 0.0f,
+				hasUV ? 1.0f - pMesh->mTextureCoords[0][i].y : 0.0f
 				)
 			);
 	}
