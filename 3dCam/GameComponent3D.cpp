@@ -16,6 +16,11 @@ Vector3 GameComponent3D::GetRotation()
 	return rotation;
 }
 
+dx::XMMATRIX GameComponent3D::GetRotationMatrix()
+{
+	return dx::XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
+}
+
 void GameComponent3D::SetLocalPosition(Vector3 pos) {
 	localPosition = pos;
 }
@@ -39,14 +44,18 @@ dx::XMMATRIX GameComponent3D::GetLocalTransform()
 
 dx::XMMATRIX GameComponent3D::GetGlobalTransform()
 {
+	return GetLocalTransform() * GetParentTransform();
+}
+
+dx::XMMATRIX GameComponent3D::GetParentTransform()
+{
 	dx::XMMATRIX parentTransform = dx::XMMatrixIdentity();
 
 	if (auto parentComponent = dynamic_cast<GameComponent3D*>(parent.get()))
 	{
 		parentTransform = parentComponent->GetGlobalTransform();
 	}
-
-	return GetLocalTransform() * parentTransform;
+	return parentTransform;
 }
 
 void GameComponent3D::Initialize()

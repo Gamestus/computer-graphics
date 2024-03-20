@@ -10,7 +10,9 @@ public:
     Camera* Cam;
     CatamariPlayer();
     void Initialize();
+    void Update(float delta);
 private:
     AssimpMesh* centralMesh;
+    float moveSpeed = 2.0f;
 };
 

@@ -13,15 +13,16 @@ DirectX::XMMATRIX Camera::GetMatrix()
 	dx::XMMATRIX projection = isOrthographic ?
 		dx::XMMatrixPerspectiveLH(1.0f, 1.0f, 0.4f, 20.0f) : DirectX::XMMatrixOrthographicLH(10.0f, 10.0f, 0.4f, 20.0f);
 
-
 	if (isOrbit) {
+		auto parentPosition = GetParentTransform().r[3];
 		auto pos = dx::XMVector3Transform(
 			dx::XMVectorSet(0, 0, -distance, 0.0f),
 			dx::XMMatrixRotationRollPitchYaw(orbitPhi, -orbitTheta, 0.0f)
 		);
+		pos = dx::XMVectorAdd(pos, parentPosition);
 		matrix = dx::XMMatrixLookAtLH(
 			pos,
-			dx::XMVectorZero(),
+			parentPosition,
 			dx::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)
 		) * rotationMatrix;
 	}
@@ -34,6 +35,11 @@ DirectX::XMMATRIX Camera::GetMatrix()
 	}
 
 	return matrix * projection;
+}
+
+float Camera::GetTheta()
+{
+	return orbitTheta;
 }
 
 #define NODGI
@@ -55,7 +61,7 @@ void Camera::Update(float delta) {
 		input.x = -1;
 	}
 
-	float clampedValue = orbitPhi + input.y * delta * moveSpeed;
+	float clampedValue = orbitPhi - input.y * delta * moveSpeed;
 	if (clampedValue < -1.5f)
 		clampedValue = -1.5f;
 	else if (clampedValue > 1.5f)
@@ -111,22 +117,22 @@ void Camera::Update(float delta) {
 		clampedValue = 12.5f;
 	distance = clampedValue;
 
-	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D1))) {
-		distance = 5.0f;
-		rotation = Vector3(0, 0, 0);
-		localPosition = Vector3(0, 0, distance);
-		isOrbit = true;
-	}
-	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D2))) {
-		distance = 5.0f;
-		rotation = Vector3(0, 0, 0);
-		localPosition = Vector3(0, 0, -distance);
-		isOrbit = false;
-	}
-	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D3))) {
-		isOrthographic = false;
-	}
-	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D4))) {
-		isOrthographic = true;
-	}
+//	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D1))) {
+//		distance = 5.0f;
+//		rotation = Vector3(0, 0, 0);
+//		localPosition = Vector3(0, 0, distance);
+//		isOrbit = true;
+//	}
+//	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D2))) {
+//		distance = 5.0f;
+//		rotation = Vector3(0, 0, 0);
+//		localPosition = Vector3(0, 0, -distance);
+//		isOrbit = false;
+//	}
+//	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D3))) {
+//		isOrthographic = false;
+//	}
+//	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D4))) {
+//		isOrthographic = true;
+//	}
 }

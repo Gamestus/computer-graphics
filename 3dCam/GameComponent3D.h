@@ -8,6 +8,7 @@ public:
 	Vector3 GetGlobalPosition();
 	Vector3 GetLocalPosition();
 	Vector3 GetRotation();
+	dx::XMMATRIX GetRotationMatrix();
 
 	void SetLocalPosition(Vector3 pos);
 
@@ -16,6 +17,7 @@ public:
 	virtual void Draw();
 	dx::XMMATRIX GetLocalTransform();
 	dx::XMMATRIX GetGlobalTransform();
+	dx::XMMATRIX GetParentTransform();
 protected:
 	Vector3 localPosition;
 	Vector3 rotation;

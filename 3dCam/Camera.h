@@ -7,6 +7,7 @@ public:
     Camera();
 
     dx::XMMATRIX GetMatrix();
+    float GetTheta();
 	void Update(float delta);
     float moveSpeed = 2.0f;
 private:

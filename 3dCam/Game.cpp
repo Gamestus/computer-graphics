@@ -83,6 +83,8 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	// Add Player
 	auto player = RootComponent->AddChild<CatamariPlayer>(std::make_unique<CatamariPlayer>());
 	CurrCam = player->Cam;
+
+	RootComponent->AddChild<AssimpMesh>(std::make_unique<AssimpMesh>("models\\cube.obj"));
 }
 
 Game::~Game() {
