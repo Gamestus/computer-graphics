@@ -4,11 +4,19 @@
 #include <assimp/postprocess.h>
 
 AssimpMesh::AssimpMesh(std::string filepath)
-	: AssimpMesh(filepath, 1.0f) {}
+	: AssimpMesh(filepath, nullptr) {}
 
-AssimpMesh::AssimpMesh(std::string filepath, float importScale)
+AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath)
+	: AssimpMesh(filepath, nullptr, 1.0f) {}
+
+
+AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath, float importScale)
 {
 	ShaderFile = L"./Shaders/ShaderTexture.hlsl";
+	if (texpath != nullptr)
+	{
+		TextureFile = texpath;
+	}
 
 	Assimp::Importer importer;
 	unsigned int flags = aiProcess_Triangulate | aiProcess_JoinIdenticalVertices;

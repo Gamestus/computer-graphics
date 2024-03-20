@@ -5,6 +5,7 @@ class AssimpMesh :
 {
 public:
     AssimpMesh(std::string filepath);
-    AssimpMesh(std::string filepath, float importScale);
+    AssimpMesh(std::string filepath, LPCWSTR texpath);
+    AssimpMesh(std::string filepath, LPCWSTR texpath, float importScale);
 };
 

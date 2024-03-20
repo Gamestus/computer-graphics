@@ -34,7 +34,7 @@ void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 	
 	game = Game::Instance;
 	indices = nIndices;
-	camera = game->CurrCam;
+	camera = &game->CurrCam;
 
 	ID3DBlob* errorVertexCode = nullptr;
 	auto res = D3DCompileFromFile(ShaderFile,
@@ -168,7 +168,7 @@ void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 
 	//texture
 
-	HRESULT hr = dx::CreateWICTextureFromFile(game->WrlDevice.Get(), L"textures\\saul.jpg", nullptr, &Texture);
+	HRESULT hr = dx::CreateWICTextureFromFile(game->WrlDevice.Get(), TextureFile, nullptr, &Texture);
 }
 
 void MeshComponent::Draw() {
@@ -178,7 +178,7 @@ void MeshComponent::Draw() {
 	//data.offset = Vector4(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f);
 	data.transform = dx::XMMatrixTranspose(
 		GetGlobalTransform() *
-		camera->GetMatrix()
+		(*camera)->GetMatrix()
 	);
 
 	game->DeviceContext->RSSetState(rastState);

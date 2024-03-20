@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="AssimpMesh.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CatamariPlayer.h" />
     <ClInclude Include="CollisionRect.h" />
     <ClInclude Include="DisplayWin32.h" />
     <ClInclude Include="FlexingCube.h" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="AssimpMesh.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CatamariPlayer.cpp" />
     <ClCompile Include="CollisionRect.cpp" />
     <ClCompile Include="DisplayWin32.cpp" />
     <ClCompile Include="FlexingCube.cpp" />

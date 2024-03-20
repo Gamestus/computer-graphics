@@ -26,7 +26,8 @@ public:
 	float totalTime = 0;
 	unsigned int frameCount = 0;
 	LPCWSTR ShaderFile = L"./Shaders/ShaderConstBuf.hlsl";
-	Camera* camera;
+	LPCWSTR TextureFile = L"textures\\obama_c.jpg";
+	Camera** camera;
 
 protected:
 	ID3D11ShaderResourceView* Texture;
