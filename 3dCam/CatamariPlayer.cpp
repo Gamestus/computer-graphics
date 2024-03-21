@@ -34,6 +34,8 @@ void CatamariPlayer::Update(float delta)
     // Obtain the rotation matrix of the camera
     dx::XMMATRIX rotationMatrix = dx::XMMatrixRotationY( -Cam->GetTheta() );
 
+    moveInput *= moveSpeed * delta;
+
     // Transform the moveInput vector based on the rotation matrix
     dx::XMVECTOR transformedMoveInput = dx::XMVector3Transform(
         dx::XMLoadFloat3(&moveInput),

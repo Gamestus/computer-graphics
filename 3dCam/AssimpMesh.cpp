@@ -7,7 +7,7 @@ AssimpMesh::AssimpMesh(std::string filepath)
 	: AssimpMesh(filepath, nullptr) {}
 
 AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath)
-	: AssimpMesh(filepath, nullptr, 1.0f) {}
+	: AssimpMesh(filepath, texpath, 1.0f) {}
 
 
 AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath, float importScale)
@@ -32,9 +32,9 @@ AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath, float importScale)
 	for (int i = 0; i < pMesh->mNumVertices; i++)
 	{
 		vertices.push_back(
-			Vertex(pMesh->mVertices[i].x,
-				pMesh->mVertices[i].y,
-				pMesh->mVertices[i].z,
+			Vertex(pMesh->mVertices[i].x * importScale,
+				pMesh->mVertices[i].y * importScale,
+				pMesh->mVertices[i].z * importScale,
 				1.0f,
 				1.0f,
 				1.0f,

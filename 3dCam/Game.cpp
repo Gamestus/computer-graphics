@@ -9,7 +9,10 @@
 #include "FlexingCube.h"
 #include "AssimpMesh.h"
 #include "CatamariPlayer.h"
+#include <filesystem>
 
+
+namespace fs = std::filesystem;
 
 Game* Game::Instance = nullptr;
 
@@ -84,7 +87,26 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	auto player = RootComponent->AddChild<CatamariPlayer>(std::make_unique<CatamariPlayer>());
 	CurrCam = player->Cam;
 
-	RootComponent->AddChild<AssimpMesh>(std::make_unique<AssimpMesh>("models\\cube.obj"));
+	//RootComponent->AddChild<AssimpMesh>(std::make_unique<AssimpMesh>("models\\UV_cube.obj"));
+
+	//RootComponent->AddChild<AssimpMesh>(std::make_unique<AssimpMesh>("models\\house\\Banana_low.obj",L"models\\house\\BananaShdr_albedo.jpeg", 4.0));
+
+
+
+	std::string folderPath = "models/house/";
+
+	for (const auto& entry : fs::directory_iterator(folderPath)) {
+		std::string filePath = entry.path().string();
+
+		if (filePath.find(".obj") != std::string::npos) {
+			std::string texturePath = filePath;
+			texturePath.replace(texturePath.find("_low.obj"), 8, "Shdr_albedo.jpeg");
+
+			RootComponent->AddChild<AssimpMesh>(
+				std::make_unique<AssimpMesh>(filePath, std::wstring(texturePath.begin(), texturePath.end()).c_str(), 4.0)
+			);
+		}
+	}
 }
 
 Game::~Game() {

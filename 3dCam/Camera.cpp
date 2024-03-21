@@ -115,7 +115,7 @@ void Camera::Update(float delta) {
 		clampedValue = 0.2;
 	else if (clampedValue > 12.5f)
 		clampedValue = 12.5f;
-	distance = clampedValue;
+	//distance = clampedValue;
 
 //	if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::D1))) {
 //		distance = 5.0f;
