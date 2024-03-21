@@ -31,21 +31,34 @@ void CatamariPlayer::Update(float delta)
         moveInput.x = -1;
     }
 
-    // Obtain the rotation matrix of the camera
     dx::XMMATRIX rotationMatrix = dx::XMMatrixRotationY( -Cam->GetTheta() );
 
     moveInput *= moveSpeed * delta;
 
-    // Transform the moveInput vector based on the rotation matrix
     dx::XMVECTOR transformedMoveInput = dx::XMVector3Transform(
         dx::XMLoadFloat3(&moveInput),
         rotationMatrix
     );
 
-    // Extract the transformed values from the vector
     dx::XMFLOAT3 transformedMovePosition;
     dx::XMStoreFloat3(&transformedMovePosition, transformedMoveInput);
 
-    // Set the local position using the transformed move position
-    SetLocalPosition(GetLocalPosition() + transformedMovePosition);
+    //rotation
+    dx::XMVECTOR upVector = dx::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+    dx::XMVECTOR rotationAxis = dx::XMVector3Cross(transformedMoveInput, upVector);
+    rotationAxis = dx::XMVector3Normalize(rotationAxis);
+
+    if (!dx::XMVector3Equal(rotationAxis, dx::XMVectorZero()))
+    {
+        float rotationAngle =  -dx::XMVectorGetX(dx::XMVector3Length(transformedMoveInput));
+
+        dx::XMVECTOR yawPitchRoll = dx::XMQuaternionRotationAxis(rotationAxis, rotationAngle);
+        rotation += yawPitchRoll;
+    }
+
+
+    auto localPosition = GetLocalPosition();
+    localPosition += transformedMovePosition;
+    SetLocalPosition(localPosition);
 }
