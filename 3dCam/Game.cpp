@@ -10,7 +10,7 @@
 #include "AssimpMesh.h"
 #include "CatamariPlayer.h"
 #include <filesystem>
-
+#include <cstdlib>
 
 namespace fs = std::filesystem;
 
@@ -102,9 +102,14 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 			std::string texturePath = filePath;
 			texturePath.replace(texturePath.find("_low.obj"), 8, "Shdr_albedo.jpeg");
 
-			RootComponent->AddChild<AssimpMesh>(
-				std::make_unique<AssimpMesh>(filePath, std::wstring(texturePath.begin(), texturePath.end()).c_str(), 4.0)
+			AssimpMesh* mesh = RootComponent->AddChild<AssimpMesh>(
+				std::make_unique<AssimpMesh>(filePath, std::wstring(texturePath.begin(), texturePath.end()).c_str(), 4.0, true)
 			);
+			float x = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 20.0f - 10.0f;
+			float z = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 20.0f - 10.0f;
+
+			SimpleMath::Vector3 randomPosition(x, 0.0f, z);
+			mesh->SetLocalPosition(randomPosition);
 		}
 	}
 }

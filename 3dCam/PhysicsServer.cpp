@@ -21,14 +21,17 @@ void PhysicsServer::RegisterRect(CollisionRect* rect)
 	rects.push_back(rect);
 }
 
+void PhysicsServer::RegisterPoint(DirectX::XMVECTOR point)
+{
+    points.push_back(point);
+}
+
 void PhysicsServer::UpdatePhysics()
 {
-    for (size_t i = 0; i < rects.size(); ++i) {
-        for (size_t j = i + 1; j < rects.size(); ++j) {
-            if (rects[i]->rect2D.Intersects(rects[j]->rect2D)) {
-                rects[i]->OnCollision(rects[j]);
-                rects[j]->OnCollision(rects[i]);
-            }
+    for (size_t i = 0; i < points.size(); ++i) {
+        if (player->Contains(points[i]))
+        {
+            OutputDebugStringW(L"buffer\n");
         }
     }
 }

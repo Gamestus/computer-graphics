@@ -14,5 +14,6 @@ public:
 private:
     AssimpMesh* centralMesh;
     float moveSpeed = 2.0f;
+    dx::BoundingSphere collision{};
 };
 

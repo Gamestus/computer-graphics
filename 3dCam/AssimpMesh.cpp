@@ -1,4 +1,5 @@
 #include "AssimpMesh.h"
+#include "PhysicsServer.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -9,9 +10,14 @@ AssimpMesh::AssimpMesh(std::string filepath)
 AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath)
 	: AssimpMesh(filepath, texpath, 1.0f) {}
 
-
-AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath, float importScale)
+AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath, float importScale, bool isCollision)
 {
+	game = Game::Instance;
+	if (isCollision)
+	{
+		game->PhysServer->RegisterPoint(GetGlobalPosition());
+	}
+
 	ShaderFile = L"./Shaders/ShaderTexture.hlsl";
 	if (texpath != nullptr)
 	{
@@ -19,10 +25,22 @@ AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath, float importScale)
 	}
 
 	Assimp::Importer importer;
-	unsigned int flags = aiProcess_Triangulate | aiProcess_JoinIdenticalVertices;
+	unsigned int flags = aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_FlipUVs;
 	const aiScene* pScene = importer.ReadFile(filepath, flags);
 	
 	const auto pMesh = pScene->mMeshes[0];
+
+	// center mesh
+	aiVector3D center(0.0f, 0.0f, 0.0f);
+	for (unsigned int i = 0; i < pMesh->mNumVertices; ++i) {
+		center += pMesh->mVertices[i];
+	}
+	center /= pMesh->mNumVertices;
+
+	for (unsigned int i = 0; i < pMesh->mNumVertices; ++i) {
+		pMesh->mVertices[i] -= center;
+	}
+
 
 	std::vector<Vertex> vertices;
 	vertices.reserve(pMesh->mNumVertices);
@@ -41,7 +59,7 @@ AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath, float importScale)
 				1.0f,
 				1.0f,
 				hasUV ? pMesh->mTextureCoords[0][i].x : 0.0f,
-				hasUV ? 1.0f - pMesh->mTextureCoords[0][i].y : 0.0f
+				hasUV ? pMesh->mTextureCoords[0][i].y : 0.0f
 				)
 			);
 	}

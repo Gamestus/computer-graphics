@@ -8,14 +8,17 @@ CatamariPlayer::CatamariPlayer()
 
 void CatamariPlayer::Initialize()
 {
+    game = Game::Instance;
 	centralMesh = AddChild<AssimpMesh>(std::make_unique<AssimpMesh>("models\\UV_sphere.obj", L"textures\\saul.jpg"));
 	Cam = AddChild<Camera>(std::make_unique<Camera>());
+    game->PhysServer->player = &collision;
 }
 
 
 void CatamariPlayer::Update(float delta)
 {
-
+    collision.Radius = 1.0;
+    collision.Center = GetGlobalPosition();
     Vector3 moveInput;
     if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::W))) {
         moveInput.z = 1;

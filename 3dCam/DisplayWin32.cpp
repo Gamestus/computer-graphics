@@ -6,7 +6,7 @@ DisplayWin32::DisplayWin32(HINSTANCE hInstanceNew, LRESULT CALLBACK MessageHandl
 	hInstance = hInstanceNew;
 
 
-	LPCWSTR applicationName = L"CoolerGame";
+	LPCWSTR applicationName = L"CatamariBananacy";
 
 	wc.cbSize = sizeof(wc);
 	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
