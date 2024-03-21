@@ -2,6 +2,8 @@
 #include <vector>
 #include <DirectXCollision.h>
 
+class CatamariPlayer;
+class AssimpMesh;
 class CollisionRect;
 
 class PhysicsServer
@@ -12,11 +14,12 @@ public:
 	PhysicsServer();
 	~PhysicsServer();
 	void RegisterRect(CollisionRect* rect);
-	void RegisterPoint(DirectX::XMVECTOR rect);
+	void RegisterMesh(AssimpMesh* mesh);
 	void UpdatePhysics();
 	DirectX::BoundingSphere* player;
+	CatamariPlayer* CatamariPlayer;
 private:
 	std::vector<CollisionRect*> rects;
-	std::vector<DirectX::XMVECTOR> points;
+	std::vector<AssimpMesh*> meshes;
 };
 

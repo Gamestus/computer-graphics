@@ -9,7 +9,7 @@ class GameComponent
 {
 public:
 	Game* game;
-	std::unique_ptr<GameComponent> parent;
+	GameComponent* parent;
 	
 	GameComponent();
 
@@ -22,7 +22,7 @@ public:
 		static_assert(std::is_base_of<GameComponent, T>::value,
 			"T must be a GameComponent derived class!");
 
-		child->parent.reset(this);
+		child->parent = this;
 		children.push_back(std::move(child));
 		return dynamic_cast<T*>(children.back().get());
 	}
@@ -32,8 +32,11 @@ public:
 	{
 		return dynamic_cast<T*>(children[index].get());
 	}
+	void Reparent(GameComponent* NewParent);
 	virtual void Update(float delta);
 	virtual void Draw();
+
+
 protected:
 	Vector2 globalPosition;
 	Vector2 localPosition;

@@ -1,7 +1,7 @@
 #include "PhysicsServer.h"
 #include "SimpleMath.h"
 #include "CollisionRect.h"
-
+#include "AssimpMesh.h"
 using namespace DirectX;
 
 PhysicsServer* PhysicsServer::Instance = nullptr;
@@ -21,17 +21,18 @@ void PhysicsServer::RegisterRect(CollisionRect* rect)
 	rects.push_back(rect);
 }
 
-void PhysicsServer::RegisterPoint(DirectX::XMVECTOR point)
+void PhysicsServer::RegisterMesh(AssimpMesh* mesh)
 {
-    points.push_back(point);
+    meshes.push_back(mesh);
 }
 
 void PhysicsServer::UpdatePhysics()
 {
-    for (size_t i = 0; i < points.size(); ++i) {
-        if (player->Contains(points[i]))
+    for (size_t i = 0; i < meshes.size(); ++i) {
+        if (player->Contains(meshes[i]->GetGlobalPosition()))
         {
-            OutputDebugStringW(L"buffer\n");
+            OutputDebugStringW(L"Collision!\n");
+            meshes[i]->Reparent((GameComponent*)CatamariPlayer);
         }
     }
 }

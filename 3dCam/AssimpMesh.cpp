@@ -12,10 +12,11 @@ AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath)
 
 AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath, float importScale, bool isCollision)
 {
+	MeshFile = filepath;
 	game = Game::Instance;
 	if (isCollision)
 	{
-		game->PhysServer->RegisterPoint(GetGlobalPosition());
+		game->PhysServer->RegisterMesh(this);
 	}
 
 	ShaderFile = L"./Shaders/ShaderTexture.hlsl";
@@ -26,7 +27,7 @@ AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath, float importScale,
 
 	Assimp::Importer importer;
 	unsigned int flags = aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_FlipUVs;
-	const aiScene* pScene = importer.ReadFile(filepath, flags);
+	const aiScene* pScene = importer.ReadFile(MeshFile, flags);
 	
 	const auto pMesh = pScene->mMeshes[0];
 

@@ -4,6 +4,8 @@ class AssimpMesh :
     public MeshComponent
 {
 public:
+    std::string MeshFile;
+
     AssimpMesh(std::string filepath);
     AssimpMesh(std::string filepath, LPCWSTR texpath);
     AssimpMesh(std::string filepath, LPCWSTR texpath, float importScale, bool isCollision = false);

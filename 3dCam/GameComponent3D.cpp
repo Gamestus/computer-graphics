@@ -51,7 +51,7 @@ dx::XMMATRIX GameComponent3D::GetParentTransform()
 {
 	dx::XMMATRIX parentTransform = dx::XMMatrixIdentity();
 
-	if (auto parentComponent = dynamic_cast<GameComponent3D*>(parent.get()))
+	if (auto parentComponent = dynamic_cast<GameComponent3D*>(parent))
 	{
 		parentTransform = parentComponent->GetGlobalTransform();
 	}
