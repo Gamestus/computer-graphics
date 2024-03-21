@@ -11,7 +11,10 @@ public:
 	dx::XMMATRIX GetRotationMatrix();
 
 	void SetLocalPosition(Vector3 pos);
+	void SetLocalRotation(Vector3 rot);
 
+	virtual void Reparent(GameComponent* NewParent);
+	virtual void Reparent(GameComponent3D* NewParent);
 	virtual void Update(float delta);
 	virtual void Initialize();
 	virtual void Draw();

@@ -12,6 +12,7 @@ AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath)
 
 AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath, float importScale, bool isCollision)
 {
+	IsCollision = isCollision;
 	MeshFile = filepath;
 	game = Game::Instance;
 	if (isCollision)

@@ -9,7 +9,7 @@ CatamariPlayer::CatamariPlayer()
 void CatamariPlayer::Initialize()
 {
     game = Game::Instance;
-	centralMesh = AddChild<AssimpMesh>(std::make_unique<AssimpMesh>("models\\UV_sphere.obj", L"textures\\saul.jpg"));
+	centralMesh = AddChild<AssimpMesh>(std::make_unique<AssimpMesh>("models\\UV_sphere.obj", L"textures\\obama_c.jpg"));
 	Cam = AddChild<Camera>(std::make_unique<Camera>());
     game->PhysServer->player = &collision;
     game->PhysServer->CatamariPlayer = this;

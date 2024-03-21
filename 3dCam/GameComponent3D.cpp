@@ -25,6 +25,36 @@ void GameComponent3D::SetLocalPosition(Vector3 pos) {
 	localPosition = pos;
 }
 
+void GameComponent3D::SetLocalRotation(Vector3 rot) {
+	rotation = rot;
+}
+
+void GameComponent3D::Reparent(GameComponent* NewParent)
+{
+	GameComponent::Reparent(NewParent);
+}
+
+void GameComponent3D::Reparent(GameComponent3D* NewParent)
+{
+	dx::XMMATRIX oldGlobalTransform = GetGlobalTransform();
+
+
+	GameComponent::Reparent((GameComponent*)NewParent);
+	dx::XMMATRIX newParentInverseTransform = dx::XMMatrixInverse(nullptr, GetParentTransform());
+
+	dx::XMMATRIX newLocalTransform = oldGlobalTransform * newParentInverseTransform;
+
+	dx::XMVECTOR newScale;
+	dx::XMVECTOR newRotation;
+	dx::XMVECTOR newPosition;
+	dx::XMMatrixDecompose(&newScale, &newRotation, &newPosition, newLocalTransform);
+
+
+
+	SetLocalPosition(newPosition);
+	SetLocalRotation(newRotation);
+}
+
 void GameComponent3D::Update(float delta)
 {
 }

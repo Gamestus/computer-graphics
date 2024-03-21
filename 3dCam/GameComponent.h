@@ -32,7 +32,7 @@ public:
 	{
 		return dynamic_cast<T*>(children[index].get());
 	}
-	void Reparent(GameComponent* NewParent);
+	virtual void Reparent(GameComponent* NewParent);
 	virtual void Update(float delta);
 	virtual void Draw();
 

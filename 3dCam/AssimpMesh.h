@@ -5,7 +5,7 @@ class AssimpMesh :
 {
 public:
     std::string MeshFile;
-
+    bool IsCollision;
     AssimpMesh(std::string filepath);
     AssimpMesh(std::string filepath, LPCWSTR texpath);
     AssimpMesh(std::string filepath, LPCWSTR texpath, float importScale, bool isCollision = false);

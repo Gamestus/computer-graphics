@@ -29,10 +29,11 @@ void PhysicsServer::RegisterMesh(AssimpMesh* mesh)
 void PhysicsServer::UpdatePhysics()
 {
     for (size_t i = 0; i < meshes.size(); ++i) {
-        if (player->Contains(meshes[i]->GetGlobalPosition()))
+        if (meshes[i]->IsCollision && player->Contains(meshes[i]->GetGlobalPosition()))
         {
             OutputDebugStringW(L"Collision!\n");
-            meshes[i]->Reparent((GameComponent*)CatamariPlayer);
+            meshes[i]->Reparent((GameComponent3D*)CatamariPlayer);
+            meshes[i]->IsCollision = false;
         }
     }
 }

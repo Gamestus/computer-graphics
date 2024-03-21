@@ -110,6 +110,7 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 
 			SimpleMath::Vector3 randomPosition(x, 0.0f, z);
 			mesh->SetLocalPosition(randomPosition);
+			//mesh->SetLocalRotation(Vector3(1,0,0));
 		}
 	}
 }
