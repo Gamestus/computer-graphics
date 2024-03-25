@@ -16,6 +16,15 @@ void CatamariPlayer::Initialize()
 }
 
 
+void ExtractPitchYawRollFromXMMatrix(float* flt_p_PitchOut, float* flt_p_YawOut, float* flt_p_RollOut, const DirectX::XMMATRIX* XMMatrix_p_Rotation)
+{
+    DirectX::XMFLOAT4X4 XMFLOAT4X4_Values;
+    DirectX::XMStoreFloat4x4(&XMFLOAT4X4_Values, DirectX::XMMatrixTranspose(*XMMatrix_p_Rotation));
+    *flt_p_PitchOut = (float)asin(-XMFLOAT4X4_Values._23);
+    *flt_p_YawOut = (float)atan2(XMFLOAT4X4_Values._13, XMFLOAT4X4_Values._33);
+    *flt_p_RollOut = (float)atan2(XMFLOAT4X4_Values._21, XMFLOAT4X4_Values._22);
+}
+
 void CatamariPlayer::Update(float delta)
 {
     collision.Radius = 1.0;
@@ -48,21 +57,28 @@ void CatamariPlayer::Update(float delta)
     dx::XMStoreFloat3(&transformedMovePosition, transformedMoveInput);
 
     //rotation
-    dx::XMVECTOR upVector = dx::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+    dx::XMVECTOR upVector = dx::XMVectorSet(0.0f, 1.0f, 0.0f, 1.0f);
 
-    dx::XMVECTOR rotationAxis = dx::XMVector3Cross(transformedMoveInput, upVector);
+    dx::XMVECTOR rotationAxis = dx::XMVector3Cross(upVector, transformedMoveInput);
     rotationAxis = dx::XMVector3Normalize(rotationAxis);
 
-    if (!dx::XMVector3Equal(rotationAxis, dx::XMVectorZero()))
-    {
-        float rotationAngle =  -dx::XMVectorGetX(dx::XMVector3Length(transformedMoveInput));
-
-        dx::XMVECTOR yawPitchRoll = dx::XMQuaternionRotationAxis(rotationAxis, rotationAngle);
-        rotation += yawPitchRoll;
-    }
-
+    assert(rotationAxis.m128_f32[1] == 0.0);
 
     auto localPosition = GetLocalPosition();
     localPosition += transformedMovePosition;
     SetLocalPosition(localPosition);
+
+    if (!dx::XMVector3Equal(rotationAxis, dx::XMVectorZero()))
+    {
+        float rotationAngle = dx::XMVectorGetX(dx::XMVector3Length(transformedMoveInput));
+        dx::XMMATRIX rotationMatrix = dx::XMMatrixRotationAxis(rotationAxis, rotationAngle);
+        dx::XMMATRIX transform = GetGlobalTransform();
+        dx::XMMATRIX transformedMatrix =  transform * rotationMatrix;
+        float yaw, pitch, roll;
+        ExtractPitchYawRollFromXMMatrix(&yaw, &pitch, &roll, &transformedMatrix);
+        rotation.x = yaw;
+        rotation.y = pitch;
+        rotation.z = roll;
+    }
 }
+
