@@ -1,6 +1,8 @@
 Texture2D DiffuseMap : register(t0);
 SamplerState Sampler : register(s0);
 
+
+
 struct VS_IN
 {
 	float4 pos : POSITION0;
@@ -11,19 +13,25 @@ struct VS_IN
 struct PS_IN
 {
 	float4 pos : SV_POSITION;
- 	float4 col : COLOR;
+	float4 col : COLOR;
 	float2 UV : TEXCOORD;
 };
 
 struct ConstantData
 {
 	matrix transform;
-	float4 color;
+	matrix rotationMatrix;
 };
 
 cbuffer ConstBuf : register(b0) {
 	ConstantData ConstData;
 }
+
+static const float4 directionalLight = {1.0f, 0.0f, 0.0f, 0.0f};
+static const float diffuseReflectionCoeff = 0.2f;
+static const float lightIntencity = 5.0f;
+static float4 one = {1.0f,1.0f,1.0f,1.0f};
+static float4 ambient = {0.2f,0.2f,0.2f,0.1f};
 
 PS_IN VSMain(VS_IN input, uint vId : SV_VertexID)
 {
@@ -31,13 +39,18 @@ PS_IN VSMain(VS_IN input, uint vId : SV_VertexID)
 	
 	output.pos = mul(input.pos,ConstData.transform);
 	output.UV = input.UV;
-	output.col = ConstData.color;
+	output.col = input.col;
 	
 	return output;
 }
 
-float4 PSMain( PS_IN input ) : SV_Target
+float4 PSMain(PS_IN input) : SV_Target
 {
-	float4 col = DiffuseMap.Sample(Sampler, input.UV) * input.col;
-	return col;
+	float4 transformedDirectionalLight = mul(ConstData.rotationMatrix, directionalLight);
+	float4 textureColor = DiffuseMap.Sample(Sampler, input.UV);
+	float cosin = max(dot(input.col.xyz, transformedDirectionalLight.xyz), 0.0f);
+	
+	float4 lighting = ambient + (lightIntencity * diffuseReflectionCoeff * cosin);
+	
+	return lighting * textureColor;
 }

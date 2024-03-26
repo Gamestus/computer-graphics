@@ -31,5 +31,5 @@ FlexingCube::FlexingCube() : MeshComponent({
 void FlexingCube::Update(float delta)
 {
 
-	data.color.x += delta;
+	//data.color.x += delta;
 }

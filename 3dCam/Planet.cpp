@@ -25,5 +25,4 @@ void Planet::Initialize()
         Sphere::GenerateSphereIndices(12, 12)
     ));
     auto mesh = GetChild<MeshComponent>(0);
-    mesh->SetColor(PlanetColor);
 }

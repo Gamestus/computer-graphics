@@ -48,7 +48,7 @@ void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 		&errorVertexCode);
 
 
-	game->WrlDevice->CreateVertexShader(
+		game->WrlDevice->CreateVertexShader(
 		vertexShaderByteCode->GetBufferPointer(),
 		vertexShaderByteCode->GetBufferSize(),
 		nullptr, &vertexShader);
@@ -180,9 +180,10 @@ void MeshComponent::Draw() {
 		GetGlobalTransform() *
 		(*camera)->GetMatrix()
 	);
+	data.globalTransform = dx::XMMatrixTranspose(GetGlobalTransform());
 
 	game->DeviceContext->RSSetState(rastState);
-	game->DeviceContext->PSSetShaderResources(0, 1, &Texture);
+	game->DeviceContext->PSSetShaderResources(0, 1, &Texture);	
 	game->DeviceContext->PSSetSamplers(0, 1, &pSamplerState);
 
 
@@ -197,6 +198,7 @@ void MeshComponent::Draw() {
 
 	//set buffer to vertex shader
 	game->DeviceContext->VSSetConstantBuffers(0, 1, &constantBuffer);
+	game->DeviceContext->PSSetConstantBuffers(0, 1, &constantBuffer);
 
 	//Update buffer
 	D3D11_MAPPED_SUBRESOURCE res = {};
@@ -213,11 +215,6 @@ void MeshComponent::Draw() {
 
 
 
-}
-
-void MeshComponent::SetColor(Vector4 nColor)
-{
-	data.color = nColor;
 }
 
 void MeshComponent::SetupConstBuffer()

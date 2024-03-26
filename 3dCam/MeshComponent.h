@@ -20,7 +20,6 @@ public:
 	~MeshComponent();
 	void Initialize(const std::vector<int>& nIndices);
 	void Draw();
-	void SetColor(Vector4 nColor);
 
 	std::chrono::time_point<std::chrono::steady_clock> PrevTime = std::chrono::steady_clock::now();
 	float totalTime = 0;
@@ -34,7 +33,7 @@ protected:
 
 	struct ConstData {
 		dx::XMMATRIX transform;
-		Vector4 color;
+		dx::XMMATRIX globalTransform;
 	};
 
 	ConstData data{ 
@@ -42,8 +41,7 @@ protected:
 			GetGlobalTransform() *
 				dx::XMMatrixPerspectiveLH(1.0f, 1.0f ,0.1f, 10.0f)
 		),
-		//Vector4(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f),
-		Vector4(1.0f, 1.0f, 1.0f, 1.0f) };
+		dx::XMMatrixTranspose(GetGlobalTransform()) };
 protected:
 	std::vector<Vertex> points;
 	std::vector<int> indices;
