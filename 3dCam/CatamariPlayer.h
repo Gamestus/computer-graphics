@@ -11,6 +11,8 @@ public:
     CatamariPlayer();
     void Initialize();
     void Update(float delta);
+    float size = 1.0f;
+    void Eat(AssimpMesh* mesh);
 private:
     AssimpMesh* centralMesh;
     float moveSpeed = 2.0f;

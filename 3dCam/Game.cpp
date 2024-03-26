@@ -95,22 +95,26 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 
 	std::string folderPath = "models/house/";
 
-	for (const auto& entry : fs::directory_iterator(folderPath)) {
-		std::string filePath = entry.path().string();
 
-		if (filePath.find(".obj") != std::string::npos) {
-			std::string texturePath = filePath;
-			texturePath.replace(texturePath.find("_low.obj"), 8, "Shdr_albedo.jpeg");
+	for (int i = 0; i < 8; i++)
+	{
+		for (const auto& entry : fs::directory_iterator(folderPath)) {
+			std::string filePath = entry.path().string();
 
-			AssimpMesh* mesh = RootComponent->AddChild<AssimpMesh>(
-				std::make_unique<AssimpMesh>(filePath, std::wstring(texturePath.begin(), texturePath.end()).c_str(), 4.0, true)
-			);
-			float x = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 20.0f - 10.0f;
-			float z = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 20.0f - 10.0f;
+			if (filePath.find(".obj") != std::string::npos) {
+				std::string texturePath = filePath;
+				texturePath.replace(texturePath.find("_low.obj"), 8, "Shdr_albedo.jpeg");
 
-			SimpleMath::Vector3 randomPosition(x, 0.0f, z);
-			mesh->SetLocalPosition(randomPosition);
-			//mesh->SetLocalRotation(Vector3(1,0,0));
+				AssimpMesh* mesh = RootComponent->AddChild<AssimpMesh>(
+					std::make_unique<AssimpMesh>(filePath, std::wstring(texturePath.begin(), texturePath.end()).c_str(), 4.0, true)
+				);
+				float x = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 60.0f - 30.0f;
+				float z = static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 60.0f - 30.0f;
+
+				SimpleMath::Vector3 randomPosition(x, 0.0f, z);
+				mesh->SetLocalPosition(randomPosition);
+				//mesh->SetLocalRotation(Vector3(1,0,0));
+			}
 		}
 	}
 }

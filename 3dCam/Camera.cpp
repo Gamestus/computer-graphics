@@ -11,7 +11,7 @@ DirectX::XMMATRIX Camera::GetMatrix()
 	dx::XMMATRIX rotationMatrix = dx::XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
 
 	dx::XMMATRIX projection = isOrthographic ?
-		dx::XMMatrixPerspectiveLH(1.0f, 1.0f, 0.4f, 20.0f) : DirectX::XMMatrixOrthographicLH(10.0f, 10.0f, 0.4f, 20.0f);
+		dx::XMMatrixPerspectiveLH(1.0f, 1.0f, 0.4f, 60.0f) : DirectX::XMMatrixOrthographicLH(10.0f, 10.0f, 0.4f, 60.0f);
 
 	if (isOrbit) {
 		auto parentPosition = GetParentTransform().r[3];
@@ -68,7 +68,7 @@ void Camera::Update(float delta) {
 		clampedValue = 1.5f;
 
 	orbitPhi = clampedValue;
-	orbitTheta -= input.x * delta * moveSpeed;
+	orbitTheta += input.x * delta * moveSpeed;
 	if (!isOrbit)
 	{
 		rotation.x = clampedValue;

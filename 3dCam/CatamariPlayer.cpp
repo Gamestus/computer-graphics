@@ -27,7 +27,6 @@ void ExtractPitchYawRollFromXMMatrix(float* flt_p_PitchOut, float* flt_p_YawOut,
 
 void CatamariPlayer::Update(float delta)
 {
-    collision.Radius = 1.0;
     collision.Center = GetGlobalPosition();
     Vector3 moveInput;
     if (Game::Instance->InDevice->IsKeyDown(static_cast<u_char>(Keys::W))) {
@@ -46,6 +45,8 @@ void CatamariPlayer::Update(float delta)
 
     dx::XMMATRIX rotationMatrix = dx::XMMatrixRotationY( -Cam->GetTheta() );
 
+
+    moveInput = dx::XMVector3Normalize(moveInput);
     moveInput *= moveSpeed * delta;
 
     dx::XMVECTOR transformedMoveInput = dx::XMVector3Transform(
@@ -80,5 +81,15 @@ void CatamariPlayer::Update(float delta)
         rotation.y = pitch;
         rotation.z = roll;
     }
+}
+
+void CatamariPlayer::Eat(AssimpMesh* mesh)
+{
+    mesh->Reparent((GameComponent3D*)this);
+    mesh->IsCollision = false;
+    size += 0.03;
+    collision.Radius = size;
+    Cam->distance = 5.0f + size;
+    if (moveSpeed < 20.0f) moveSpeed = 1.0f + size * size;
 }
 
