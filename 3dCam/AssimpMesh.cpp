@@ -48,6 +48,7 @@ AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath, float importScale,
 	vertices.reserve(pMesh->mNumVertices);
 
 	bool hasUV = pMesh->HasTextureCoords(0);
+	bool hasNormals = pMesh->HasNormals();
 
 	for (int i = 0; i < pMesh->mNumVertices; i++)
 	{
@@ -56,9 +57,9 @@ AssimpMesh::AssimpMesh(std::string filepath, LPCWSTR texpath, float importScale,
 				pMesh->mVertices[i].y * importScale,
 				pMesh->mVertices[i].z * importScale,
 				1.0f,
-				1.0f,
-				1.0f,
-				1.0f,
+				hasNormals ? pMesh->mNormals[i].x : 1.0f,
+				hasNormals ? pMesh->mNormals[i].y : 1.0f,
+				hasNormals ? pMesh->mNormals[i].z : 1.0f,
 				1.0f,
 				hasUV ? pMesh->mTextureCoords[0][i].x : 0.0f,
 				hasUV ? pMesh->mTextureCoords[0][i].y : 0.0f
