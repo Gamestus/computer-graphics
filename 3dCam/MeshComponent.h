@@ -32,16 +32,15 @@ protected:
 	ID3D11ShaderResourceView* Texture;
 
 	struct ConstData {
-		dx::XMMATRIX transform;
+		dx::XMMATRIX projectionMatrix;
 		dx::XMMATRIX globalTransform;
+		dx::XMVECTOR cameraPosition;
+		dx::XMMATRIX viewMatrix;
+		dx::XMMATRIX inverseTransform;
 	};
 
-	ConstData data{ 
-		dx::XMMatrixTranspose(
-			GetGlobalTransform() *
-				dx::XMMatrixPerspectiveLH(1.0f, 1.0f ,0.1f, 10.0f)
-		),
-		dx::XMMatrixTranspose(GetGlobalTransform()) };
+	ConstData data;
+
 protected:
 	std::vector<Vertex> points;
 	std::vector<int> indices;

@@ -96,7 +96,7 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	std::string folderPath = "models/house/";
 
 
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 8; i++)
 	{
 		for (const auto& entry : fs::directory_iterator(folderPath)) {
 			std::string filePath = entry.path().string();

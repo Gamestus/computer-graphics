@@ -7,7 +7,9 @@ public:
     Camera();
 
     dx::XMMATRIX GetMatrix();
+    dx::XMMATRIX GetViewMatrix();
     float GetTheta();
+    dx::XMVECTOR GetCameraPosition();
 	void Update(float delta);
     float moveSpeed = 2.0f;
     float distance = 5.0f;

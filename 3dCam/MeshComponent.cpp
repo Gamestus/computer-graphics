@@ -144,7 +144,7 @@ void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 	//rasterizer
 
 	CD3D11_RASTERIZER_DESC rastDesc = {};
-	rastDesc.CullMode = D3D11_CULL_NONE;
+	rastDesc.CullMode = D3D11_CULL_BACK;
 	rastDesc.FillMode = D3D11_FILL_SOLID;
 	res = game->WrlDevice->CreateRasterizerState(&rastDesc, &rastState);
 
@@ -176,11 +176,17 @@ void MeshComponent::Draw() {
 	UINT offsets[] = { 0 };
 
 	//data.offset = Vector4(globalPosition.x, globalPosition.y, globalPosition.z, 0.0f);
-	data.transform = dx::XMMatrixTranspose(
+	data.projectionMatrix = dx::XMMatrixTranspose(
 		GetGlobalTransform() *
 		(*camera)->GetMatrix()
 	);
+	data.viewMatrix = dx::XMMatrixTranspose(
+		GetGlobalTransform() *
+		(*camera)->GetViewMatrix()
+	);
 	data.globalTransform = dx::XMMatrixTranspose(GetGlobalTransform());
+	data.cameraPosition = (*camera)->GetCameraPosition();
+	data.inverseTransform = dx::XMMatrixTranspose(dx::XMMatrixInverse(nullptr, GetGlobalTransform()));;
 
 	game->DeviceContext->RSSetState(rastState);
 	game->DeviceContext->PSSetShaderResources(0, 1, &Texture);	

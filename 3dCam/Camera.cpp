@@ -7,11 +7,17 @@ Camera::Camera()
 
 DirectX::XMMATRIX Camera::GetMatrix()
 {
-	dx::XMMATRIX matrix;
-	dx::XMMATRIX rotationMatrix = dx::XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
-
 	dx::XMMATRIX projection = isOrthographic ?
 		dx::XMMatrixPerspectiveLH(1.0f, 1.0f, 0.4f, 60.0f) : DirectX::XMMatrixOrthographicLH(10.0f, 10.0f, 0.4f, 60.0f);
+
+	return GetViewMatrix() * projection;
+}
+
+
+dx::XMMATRIX Camera::GetViewMatrix()
+{
+	dx::XMMATRIX matrix;
+	dx::XMMATRIX rotationMatrix = dx::XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
 
 	if (isOrbit) {
 		auto parentPosition = GetParentTransform().r[3];
@@ -34,12 +40,26 @@ DirectX::XMMATRIX Camera::GetMatrix()
 			dx::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
 	}
 
-	return matrix * projection;
+	return matrix;
 }
 
 float Camera::GetTheta()
 {
 	return orbitTheta;
+}
+
+dx::XMVECTOR Camera::GetCameraPosition()
+{
+	dx::XMMATRIX rotationMatrix = dx::XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
+	
+	auto parentPosition = GetParentTransform().r[3];
+	auto pos = dx::XMVector3Transform(
+		dx::XMVectorSet(0, 0, -distance, 0.0f),
+		dx::XMMatrixRotationRollPitchYaw(orbitPhi, -orbitTheta, 0.0f)
+	);
+	pos = dx::XMVectorAdd(pos, parentPosition);
+
+	return pos;
 }
 
 #define NODGI
