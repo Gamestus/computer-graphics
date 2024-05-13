@@ -31,7 +31,7 @@ cbuffer ConstBuf : register(b0) {
 	ConstantData ConstData;
 }
 
-static const float4 directionalLight = {1.0f, 0.0f, 0.0f, 1.0f};
+static const float4 directionalLight = {0.5f, 0.5f, 0.0f, 1.0f};
 static const float diffuseReflectionCoeff = 0.2f;
 static const float lightIntencity = 5.0f;
 static float4 one = {1.0f,1.0f,1.0f,1.0f};
@@ -59,16 +59,18 @@ float4 PSMain(PS_IN input) : SV_Target
 	
 	// DiffuseLight
 	
+	float3 lightVector = normalize(directionalLight.xyz);
+	
 	float3 worldNormal = normalize(mul(ConstData.inverseTransform, input.col).xyz);
-	float cosinLN = max(dot(directionalLight.xyz, worldNormal), 0.0f);
+	float cosinLN = max(dot(lightVector, worldNormal), 0.0f);
 	float diffuse = saturate(lightIntencity * diffuseReflectionCoeff * cosinLN);
 	
 	// Specular
 	
-	float3 viewDirection = normalize(ConstData.cameraPosition - input.worldPos.xyz);
-	float reflCosin = dot(worldNormal, directionalLight);
-	float3 reflectedDirection = 2 * reflCosin * worldNormal - directionalLight;
-	
+	float3 viewDirection = normalize(ConstData.cameraPosition.xyz - input.worldPos.xyz);
+	//float reflCosin = max(dot(worldNormal, lightVector), 0.0f);
+	//float3 reflectedDirection = 2 * reflCosin * worldNormal - lightVector;
+	float3 reflectedDirection = reflect(-lightVector, worldNormal);
 	float specularIntensity = pow(max(dot(reflectedDirection, viewDirection), 0.0f), specularPower);
 	
 	// Final
