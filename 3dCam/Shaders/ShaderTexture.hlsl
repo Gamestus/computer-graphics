@@ -74,7 +74,7 @@ float4 PSMain(PS_IN input) : SV_Target
 	float specularIntensity = pow(max(dot(reflectedDirection, viewDirection), 0.0f), specularPower);
 	
 	// Final
-	float4 lighting = ambient + (specularColor * specularIntensity) + diffuse;
+	float4 lighting = (ambient + diffuse) * textureColor + (specularColor * specularIntensity);
 	
-	return lighting * textureColor;
+	return lighting;
 }
