@@ -140,9 +140,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AssimpMesh.h" />
+    <ClInclude Include="Buffer.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CatamariPlayer.h" />
     <ClInclude Include="CollisionRect.h" />
+    <ClInclude Include="DepthShader.h" />
     <ClInclude Include="DisplayWin32.h" />
     <ClInclude Include="FlexingCube.h" />
     <ClInclude Include="Game.h" />
@@ -151,19 +153,24 @@
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="Keys.h" />
     <ClInclude Include="InputDevice.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="PhysicsServer.h" />
     <ClInclude Include="MeshComponent.h" />
     <ClInclude Include="Planet.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Rotator.h" />
+    <ClInclude Include="ShadowRenderTarget.h" />
+    <ClInclude Include="ShadowShader.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssimpMesh.cpp" />
+    <ClCompile Include="Buffer.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CatamariPlayer.cpp" />
     <ClCompile Include="CollisionRect.cpp" />
+    <ClCompile Include="DepthShader.cpp" />
     <ClCompile Include="DisplayWin32.cpp" />
     <ClCompile Include="FlexingCube.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -171,11 +178,14 @@
     <ClCompile Include="GameComponent3D.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="InputDevice.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="PhysicsServer.cpp" />
     <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="Planet.cpp" />
     <ClCompile Include="Rotator.cpp" />
+    <ClCompile Include="ShadowRenderTarget.cpp" />
+    <ClCompile Include="ShadowShader.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>

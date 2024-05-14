@@ -19,7 +19,8 @@ public:
 	MeshComponent(const std::vector<DirectX::XMFLOAT4>& newPoints, const std::vector<int>& nIndices, LPCWSTR Shader);
 	~MeshComponent();
 	void Initialize(const std::vector<int>& nIndices);
-	void Draw();
+	void Draw(bool isDepth = false);
+	void DrawToTexture();
 
 	std::chrono::time_point<std::chrono::steady_clock> PrevTime = std::chrono::steady_clock::now();
 	float totalTime = 0;

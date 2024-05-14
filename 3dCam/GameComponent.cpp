@@ -5,7 +5,7 @@ GameComponent::GameComponent()
 {
 	Initialize();
 }
-void GameComponent::Draw()
+void GameComponent::Draw(bool isDepth)
 {
 }
 void GameComponent::Initialize()
@@ -36,10 +36,10 @@ void GameComponent::Update(float delta)
 {
 }
 
-void GameComponent::DrawChildren() {
-	Draw();
+void GameComponent::DrawChildren(bool isDepth) {
+	Draw(isDepth);
 	for (auto& child : children) {
-		child->DrawChildren();
+		child->DrawChildren(isDepth);
 	}
 }
 

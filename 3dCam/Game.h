@@ -10,7 +10,7 @@
 #include <directxmath.h>
 #include <wrl.h>
 #include <vector>
-
+#include "Light.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
@@ -19,6 +19,9 @@
 
 class GameComponent;
 class Camera;
+class ShadowRenderTarget;
+class DepthShader;
+class ShadowShader;
 
 class Game
 {
@@ -34,6 +37,11 @@ public:
 	HRESULT SwapDevice;
 	Microsoft::WRL::ComPtr<ID3D11Device> WrlDevice;
 	ID3D11DepthStencilView* DSView;
+
+	ShadowRenderTarget* m_RenderTexture;
+	DepthShader* m_DepthShader;
+	ShadowShader* m_ShadowShader;
+	Light m_Light;
 
 	Camera* CurrCam;
 	PhysicsServer* PhysServer;
@@ -57,6 +65,7 @@ private:
 	void CreateSwapChain();
 	void CreateVertexIndexBuffers();
 	void UpdateViewport();
+	bool CreateShadows();
 	void Draw();
 protected:
 	void Initialize(HINSTANCE hInstanceNew);

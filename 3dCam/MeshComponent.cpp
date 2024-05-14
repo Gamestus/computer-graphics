@@ -1,6 +1,9 @@
 #include "MeshComponent.h"
 #include <chrono>
 #include <WICTextureLoader.h>
+#include "DepthShader.h"
+#include "ShadowRenderTarget.h"
+#include "ShadowShader.h"
 
 MeshComponent::MeshComponent()
 {
@@ -171,7 +174,13 @@ void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 	HRESULT hr = dx::CreateWICTextureFromFile(game->WrlDevice.Get(), TextureFile, nullptr, &Texture);
 }
 
-void MeshComponent::Draw() {
+void MeshComponent::Draw(bool isDepth) {
+
+	if (isDepth)
+	{
+		DrawToTexture();
+		return;
+	}
 	UINT strides[] = { sizeof(Vertex) };
 	UINT offsets[] = { 0 };
 
@@ -198,6 +207,9 @@ void MeshComponent::Draw() {
 	game->DeviceContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	game->DeviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	game->DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, strides, offsets);
+
+
+
 	//set shaders
 	game->DeviceContext->VSSetShader(vertexShader, nullptr, 0);
 	game->DeviceContext->PSSetShader(pixelShader, nullptr, 0);
@@ -217,11 +229,43 @@ void MeshComponent::Draw() {
 
 
 
-	game->DeviceContext->DrawIndexed(indices.size(), 0, 0);
+	dx::XMMATRIX lightViewMatrix = game->m_Light.GetViewMatrix();
+	dx::XMMATRIX lightProjectionMatrix = game->m_Light.GetProjectionMatrix();
+
+	dx::XMMATRIX wvp;
+	dx::XMMATRIX wvplight;
+	dx::XMMATRIX wldMatrix;
+
+	// Выводим первый куб
+	wldMatrix = GetGlobalPositionMatrix();
+	wvp = wldMatrix * (*camera)->GetViewMatrix();
+	wvplight = wldMatrix * lightViewMatrix * lightProjectionMatrix;
 
 
+	game->m_ShadowShader->Render(indices.size(),
+		GetGlobalTransform(),
+		GetGlobalTransform() * (*camera)->GetViewMatrix(),
+		wvplight,
+		Texture,
+		game->m_RenderTexture->GetShaderResourceView(),
+		game->m_Light);
 
+	//game->DeviceContext->DrawIndexed(indices.size(), 0, 0);
 }
+
+void MeshComponent::DrawToTexture()
+{
+	unsigned int stride = sizeof(Vertex);
+	unsigned int offset = 0;
+
+	// Выводим
+	game->DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	game->DeviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+	//render depth shader
+	game->m_DepthShader->Render(indices.size(), GetGlobalTransform() * (*camera)->GetMatrix());
+}
+
 
 void MeshComponent::SetupConstBuffer()
 {

@@ -11,6 +11,11 @@
 #include "CatamariPlayer.h"
 #include <filesystem>
 #include <cstdlib>
+#include "ShadowRenderTarget.h"
+#include "DepthShader.h"
+#include "ShadowShader.h"
+
+
 
 namespace fs = std::filesystem;
 
@@ -78,6 +83,7 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	CreateSwapChain();
 	CreateBackBuffer();
 	CreateDepthStencilBuffer();
+	CreateShadows();
 	UpdateViewport();
 
 	RootComponent = new GameComponent();
@@ -96,7 +102,7 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	std::string folderPath = "models/house/";
 
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		for (const auto& entry : fs::directory_iterator(folderPath)) {
 			std::string filePath = entry.path().string();
@@ -117,6 +123,11 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 			}
 		}
 	}
+
+	m_Light.SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
+	m_Light.SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
+	m_Light.SetLookAt(0.0f, 0.0f, 0.0f);
+	m_Light.GenerateProjectionMatrix(1.0f, 100.0f);
 }
 
 Game::~Game() {
@@ -167,6 +178,19 @@ void Game::UpdateViewport() {
 	viewport.MaxDepth = 1.0f;
 }
 
+bool Game::CreateShadows()
+{
+	m_RenderTexture = new ShadowRenderTarget(this);
+	if (!m_RenderTexture->Init(1.0f, 100.0f))
+		return false;
+	m_DepthShader = new DepthShader(this);
+	if (!m_DepthShader->Init())
+		return false;
+	m_ShadowShader = new ShadowShader(this);
+	if (!m_ShadowShader->Init())
+		return false;
+}
+
 void Game::Update(float delta) {
 	RootComponent->UpdateChildren(delta);
 	PhysServer->UpdatePhysics();
@@ -178,13 +202,19 @@ void Game::Draw() {
 
 	DeviceContext->RSSetViewports(1, &viewport);
 
+	//”казываем что нужно рендерить в текстуру глубины
+	m_RenderTexture->SetRenderTarget();
+	m_RenderTexture->ClearRenderTarget(0.0f, 0.0f, 0.0f, 1.0f);
+	RootComponent->DrawChildren(true);
+
 	float color[] = { 0.1f, 0.1f, 0.1f, 1.0f };
 	DeviceContext->ClearRenderTargetView(RenderView, color);
 	DeviceContext->ClearDepthStencilView(DSView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 	DeviceContext->OMSetRenderTargets(1, &RenderView, DSView);
 
-	RootComponent->DrawChildren();
+	RootComponent->DrawChildren(false);
+
 
 	SwapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0);
 }
