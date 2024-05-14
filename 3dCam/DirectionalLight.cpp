@@ -3,7 +3,7 @@
 DirectionalLight::DirectionalLight()
 {
 	rotation.x = 0.8;
-	SetLocalPosition(Vector3(0, 6, -5));
+	SetLocalPosition(Vector3(0, 7, -19));
 }
 
 dx::XMMATRIX DirectionalLight::GetViewMatrix()

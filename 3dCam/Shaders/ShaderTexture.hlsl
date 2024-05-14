@@ -91,36 +91,36 @@ float4 PSMain(PS_IN input) : SV_Target
 	
 	if((saturate(projectTexCoord.x) == projectTexCoord.x) && (saturate(projectTexCoord.y) == projectTexCoord.y))
 	{
-		//color = one;
+		depthValue = depthMapTexture.Sample(SamplerTypeClampNew, projectTexCoord).r;
+		
+		// Вычисление глубины света
+		lightDepthValue = input.lightViewPosition.z / input.lightViewPosition.w;
+		
+		// Вычитание смещения из lightDepthValue
+		lightDepthValue = lightDepthValue - bias;
+		
+		// Сравнение глубины теневой карты и глубины света, для определения того, освещен или затенен пиксель
+		// Если свет перед объектом, то пиксель освещен; если нет, то пиксель затенен и объект бросает тень за ним
+		if(lightDepthValue < depthValue)
+		{
+			float3 lightVector = normalize(ConstData.lightPosition.xyz - input.worldPos.xyz);
+			float cosinLN = max(dot(lightVector, worldNormal), 0.0f);
+			float diffuse = saturate(lightIntencity * diffuseReflectionCoeff * cosinLN);
+			
+			float3 viewDirection = normalize(ConstData.cameraPosition.xyz - input.worldPos.xyz);
+			//float reflCosin = max(dot(worldNormal, lightVector), 0.0f);
+			//float3 reflectedDirection = 2 * reflCosin * worldNormal - lightVector;
+			float3 reflectedDirection = reflect(-lightVector, worldNormal);
+			float specularIntensity = pow(max(dot(reflectedDirection, viewDirection), 0.0f), specularPower);
+			
+			
+			
+			float4 specular = specularColor * specularIntensity;
+			
+			color = (diffuse + ambient) * textureColor + specular;
+		}
 	}
-	depthValue = depthMapTexture.Sample(SamplerTypeClampNew, projectTexCoord).r;
-	
-	// Вычисление глубины света
-	lightDepthValue = input.lightViewPosition.z / input.lightViewPosition.w;
-	
-	// Вычитание смещения из lightDepthValue
-	lightDepthValue = lightDepthValue - bias;
-	
-	// Сравнение глубины теневой карты и глубины света, для определения того, освещен или затенен пиксель
-	// Если свет перед объектом, то пиксель освещен; если нет, то пиксель затенен и объект бросает тень за ним
-	if(lightDepthValue < depthValue)
-	{
-		float3 lightVector = normalize(directionalLight.xyz);
-		float cosinLN = max(dot(lightVector, worldNormal), 0.0f);
-		float diffuse = saturate(lightIntencity * diffuseReflectionCoeff * cosinLN);
-		
-		float3 viewDirection = normalize(ConstData.cameraPosition.xyz - input.worldPos.xyz);
-		//float reflCosin = max(dot(worldNormal, lightVector), 0.0f);
-		//float3 reflectedDirection = 2 * reflCosin * worldNormal - lightVector;
-		float3 reflectedDirection = reflect(-lightVector, worldNormal);
-		float specularIntensity = pow(max(dot(reflectedDirection, viewDirection), 0.0f), specularPower);
-		
-		
-		
-		float4 specular = specularColor * specularIntensity;
-		
-		color = (diffuse + ambient) * textureColor + specular;
-	}
+
 
 	
 	return color;
