@@ -17,6 +17,9 @@ dx::XMMATRIX DirectionalLight::GetViewMatrix()
 		rotatedForwardVector,
 		dx::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
 
+	float fieldOfView = (float)dx::XM_PI / 2.0f;
+	float screenAspect = 1.0f;
+	matrix *= dx::XMMatrixPerspectiveFovLH(fieldOfView, screenAspect, 1.0f, 100.0f);
 
-	return matrix * DirectX::XMMatrixOrthographicLH(10.0f, 10.0f, 0.4f, 60.0f);
+	return matrix;
 }

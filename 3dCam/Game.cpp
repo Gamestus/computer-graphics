@@ -185,6 +185,7 @@ void Game::Draw() {
 	DeviceContext->ClearState();
 
 	//Render to Texture
+	pRenderTexture->ClearRenderTarget(1.0, 1.0, 1.0, 1.0);
 	pRenderTexture->SetRenderTarget();
 	RootComponent->DrawChildren(true);
 
@@ -197,7 +198,7 @@ void Game::Draw() {
 
 	DeviceContext->OMSetRenderTargets(1, &RenderView, DSView);
 
-	RootComponent->DrawChildren(true);
+	RootComponent->DrawChildren(false);
 
 	SwapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0);
 }

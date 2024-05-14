@@ -38,6 +38,8 @@ protected:
 		dx::XMVECTOR cameraPosition;
 		dx::XMMATRIX viewMatrix;
 		dx::XMMATRIX inverseTransform;
+		dx::XMMATRIX lightMatrix;
+		dx::XMVECTOR lightPosition;
 	};
 
 	ConstData data;
@@ -62,6 +64,7 @@ private:
 	ID3D11RasterizerState* rastState;
 
 	ID3D11SamplerState* pSamplerState;
+	ID3D11SamplerState* pSamplerStateNew;
 
 	void SetupConstBuffer();
 };

@@ -3,6 +3,7 @@
 #include <WICTextureLoader.h>
 #include "DirectionalLight.h"
 #include "DepthShader.h"
+#include "ShadowRenderTarget.h"
 
 MeshComponent::MeshComponent()
 {
@@ -168,6 +169,22 @@ void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 
 	game->WrlDevice->CreateSamplerState(&samplerDesc, &pSamplerState);
 
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.MipLODBias = 0.0f;
+	samplerDesc.MaxAnisotropy = 1;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	samplerDesc.BorderColor[0] = 0;
+	samplerDesc.BorderColor[1] = 0;
+	samplerDesc.BorderColor[2] = 0;
+	samplerDesc.BorderColor[3] = 0;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	game->WrlDevice->CreateSamplerState(&samplerDesc, &pSamplerStateNew);
+
 	//texture
 
 	HRESULT hr = dx::CreateWICTextureFromFile(game->WrlDevice.Get(), TextureFile, nullptr, &Texture);
@@ -195,11 +212,17 @@ void MeshComponent::Draw(bool isDepth) {
 	);
 	data.globalTransform = dx::XMMatrixTranspose(GetGlobalTransform());
 	data.cameraPosition = (*camera)->GetCameraPosition();
-	data.inverseTransform = dx::XMMatrixTranspose(dx::XMMatrixInverse(nullptr, GetGlobalTransform()));;
+	data.inverseTransform = dx::XMMatrixTranspose(dx::XMMatrixInverse(nullptr, GetGlobalTransform()));
+	data.lightMatrix = dx::XMMatrixTranspose(GetPositionMatrix() * game->pLight->GetViewMatrix());
+	data.lightPosition = game->pLight->GetGlobalPosition();
 
+
+	ID3D11ShaderResourceView* DTexture = game->pRenderTexture->GetShaderResourceView();
 	game->DeviceContext->RSSetState(rastState);
 	game->DeviceContext->PSSetShaderResources(0, 1, &Texture);	
+	game->DeviceContext->PSSetShaderResources(1, 1, &DTexture);
 	game->DeviceContext->PSSetSamplers(0, 1, &pSamplerState);
+	game->DeviceContext->PSSetSamplers(1, 1, &pSamplerStateNew);
 
 
 	//setup IA
