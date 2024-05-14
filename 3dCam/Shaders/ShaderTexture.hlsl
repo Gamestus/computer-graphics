@@ -58,7 +58,9 @@ PS_IN VSMain(VS_IN input, uint vId : SV_VertexID)
 	output.UV = input.UV;
 	output.col = input.col;
 	
-	output.lightViewPosition = mul(input.pos, ConstData.lightMatrix);
+	float3 p = mul(ConstData.inverseTransform, input.pos).xyz;
+
+	output.lightViewPosition =  mul(float4(p, 1.0f), ConstData.lightMatrix);
 	
 	// Определение позиции света на основе позиции света и позиции вершины в мире
 	output.lightPos = ConstData.lightPosition.xyz - output.worldPos.xyz;
