@@ -12,6 +12,7 @@
 #include <vector>
 
 
+
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -19,6 +20,9 @@
 
 class GameComponent;
 class Camera;
+class ShadowRenderTarget;
+class DirectionalLight;
+class DepthShader;
 
 class Game
 {
@@ -34,6 +38,10 @@ public:
 	HRESULT SwapDevice;
 	Microsoft::WRL::ComPtr<ID3D11Device> WrlDevice;
 	ID3D11DepthStencilView* DSView;
+
+	DirectionalLight* pLight;
+	ShadowRenderTarget* pRenderTexture;
+	DepthShader* pDepthShader;
 
 	Camera* CurrCam;
 	PhysicsServer* PhysServer;
@@ -55,7 +63,7 @@ private:
 	void CreateBackBuffer();
 	void CreateDepthStencilBuffer();
 	void CreateSwapChain();
-	void CreateVertexIndexBuffers();
+	bool CreateShadowsRT();
 	void UpdateViewport();
 	void Draw();
 protected:

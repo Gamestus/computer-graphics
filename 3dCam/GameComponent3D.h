@@ -7,6 +7,7 @@ class GameComponent3D :
 public:
 	Vector3 GetGlobalPosition();
 	Vector3 GetLocalPosition();
+	dx::XMMATRIX GetPositionMatrix();
 	Vector3 GetRotation();
 	dx::XMMATRIX GetRotationMatrix();
 
@@ -17,7 +18,7 @@ public:
 	virtual void Reparent(GameComponent3D* NewParent);
 	virtual void Update(float delta);
 	virtual void Initialize();
-	virtual void Draw();
+	virtual void Draw(bool isDepth = false);
 	dx::XMMATRIX GetLocalTransform();
 	dx::XMMATRIX GetGlobalTransform();
 	dx::XMMATRIX GetParentTransform();

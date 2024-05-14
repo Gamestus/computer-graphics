@@ -6,6 +6,12 @@ Vector3 GameComponent3D::GetGlobalPosition()
 	return GetGlobalTransform().r[3];
 }
 
+dx::XMMATRIX GameComponent3D::GetPositionMatrix()
+{
+	Vector3 pos = GetGlobalTransform().r[3];
+	return dx::XMMatrixTranslation(pos.x, pos.y, pos.z);
+}
+
 Vector3 GameComponent3D::GetLocalPosition()
 {
 	return localPosition;
@@ -59,7 +65,7 @@ void GameComponent3D::Update(float delta)
 {
 }
 
-void GameComponent3D::Draw()
+void GameComponent3D::Draw(bool isDepth)
 {
 }
 

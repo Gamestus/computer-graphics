@@ -13,7 +13,7 @@ public:
 	
 	GameComponent();
 
-	void DrawChildren();
+	void DrawChildren(bool isDepth = false);
 	void UpdateChildren(float delta);
 
 	template<typename T>
@@ -34,7 +34,7 @@ public:
 	}
 	virtual void Reparent(GameComponent* NewParent);
 	virtual void Update(float delta);
-	virtual void Draw();
+	virtual void Draw(bool isDepth = false);
 
 
 protected:

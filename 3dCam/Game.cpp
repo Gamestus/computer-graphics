@@ -11,6 +11,9 @@
 #include "CatamariPlayer.h"
 #include <filesystem>
 #include <cstdlib>
+#include "ShadowRenderTarget.h"
+#include "DepthShader.h"
+#include "DirectionalLight.h"
 
 namespace fs = std::filesystem;
 
@@ -78,6 +81,7 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	CreateSwapChain();
 	CreateBackBuffer();
 	CreateDepthStencilBuffer();
+	CreateShadowsRT();
 	UpdateViewport();
 
 	RootComponent = new GameComponent();
@@ -96,7 +100,7 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	std::string folderPath = "models/house/";
 
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		for (const auto& entry : fs::directory_iterator(folderPath)) {
 			std::string filePath = entry.path().string();
@@ -117,6 +121,10 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 			}
 		}
 	}
+	AssimpMesh* mesh = RootComponent->AddChild<AssimpMesh>(std::make_unique<AssimpMesh>("models/plane.obj", L"models/house/DcolaBottleShdr_albedo.jpeg"));
+	mesh->SetLocalPosition(Vector3(0,-1,0));
+
+	pLight = RootComponent->AddChild<DirectionalLight>(std::make_unique<DirectionalLight>());
 }
 
 Game::~Game() {
@@ -176,6 +184,11 @@ void Game::Draw() {
 
 	DeviceContext->ClearState();
 
+	//Render to Texture
+	pRenderTexture->SetRenderTarget();
+	RootComponent->DrawChildren(true);
+
+	//Render To Screen
 	DeviceContext->RSSetViewports(1, &viewport);
 
 	float color[] = { 0.1f, 0.1f, 0.1f, 1.0f };
@@ -184,7 +197,7 @@ void Game::Draw() {
 
 	DeviceContext->OMSetRenderTargets(1, &RenderView, DSView);
 
-	RootComponent->DrawChildren();
+	RootComponent->DrawChildren(true);
 
 	SwapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0);
 }
@@ -275,6 +288,16 @@ void Game::CreateSwapChain() {
 	{
 		OutputDebugStringW(L"D3D11CreateDeviceAndSwapChain! Oh, that was unexpected!");
 	}
+}
+
+bool Game::CreateShadowsRT()
+{
+	pRenderTexture = new ShadowRenderTarget(this);
+	if (!pRenderTexture->Init(1.0f, 100.0f))
+		return false;
+	pDepthShader = new DepthShader(this);
+	if (!pDepthShader->Init())
+		return false;
 }
 
 void Game::AddScore(bool IsPlayerOne) {

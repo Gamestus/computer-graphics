@@ -1,6 +1,8 @@
 #include "MeshComponent.h"
 #include <chrono>
 #include <WICTextureLoader.h>
+#include "DirectionalLight.h"
+#include "DepthShader.h"
 
 MeshComponent::MeshComponent()
 {
@@ -171,7 +173,14 @@ void MeshComponent::Initialize(const std::vector<int>& nIndices) {
 	HRESULT hr = dx::CreateWICTextureFromFile(game->WrlDevice.Get(), TextureFile, nullptr, &Texture);
 }
 
-void MeshComponent::Draw() {
+void MeshComponent::Draw(bool isDepth) {
+
+	if (isDepth)
+	{
+		DrawDepth();
+		return;
+	}
+
 	UINT strides[] = { sizeof(Vertex) };
 	UINT offsets[] = { 0 };
 
@@ -221,6 +230,20 @@ void MeshComponent::Draw() {
 
 
 
+}
+
+void MeshComponent::DrawDepth()
+{
+	dx::XMMATRIX WVP;
+	UINT strides[] = { sizeof(Vertex) };
+	UINT offsets[] = { 0 };
+
+	// Выводим первый ящик
+	dx::XMMATRIX wldMatrix = GetPositionMatrix();
+	WVP = wldMatrix * game->pLight->GetViewMatrix();
+	game->DeviceContext->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	game->DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, strides, offsets);
+	game->pDepthShader->Render(indices.size(), WVP);
 }
 
 void MeshComponent::SetupConstBuffer()
