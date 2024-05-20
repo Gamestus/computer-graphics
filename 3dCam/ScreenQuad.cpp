@@ -1,5 +1,5 @@
 #include "ScreenQuad.h"
-#include "ShadowRenderTarget.h"
+#include "GRenderTarget.h"
 
 ScreenQuad::ScreenQuad()
 {
@@ -61,7 +61,7 @@ void ScreenQuad::Draw(bool isDepth)
 	UINT offsets[] = { 0 };
 
 
-	ID3D11ShaderResourceView* DTexture = game->pRenderTexture->GetShaderResourceView();
+	ID3D11ShaderResourceView* DTexture = game->pGRenderTarget->GetShaderResourceView();
 	game->DeviceContext->PSSetShaderResources(0, 1, &DTexture);
 
 	game->DeviceContext->RSSetState(rastState);

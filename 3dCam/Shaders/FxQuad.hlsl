@@ -21,5 +21,6 @@ PS_IN VSMain(uint id : SV_VertexID)
 float4 PSMain(PS_IN input) : SV_Target
 {
 	float4 screen = ScreenTexture.Load(int4(input.pos));
-	return pow(screen, 3);
+	float mono = 0.299 * screen.x + 0.587 * screen.y + 0.114 * screen.z;
+	return mono;
 }

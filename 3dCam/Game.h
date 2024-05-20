@@ -21,6 +21,7 @@
 class GameComponent;
 class Camera;
 class ShadowRenderTarget;
+class GRenderTarget;
 class DirectionalLight;
 class DepthShader;
 class ScreenQuad;
@@ -42,6 +43,7 @@ public:
 
 	DirectionalLight* pLight;
 	ShadowRenderTarget* pRenderTexture;
+	GRenderTarget* pGRenderTarget;
 	DepthShader* pDepthShader;
 
 	ScreenQuad* pQuad;

@@ -12,6 +12,7 @@
 #include <filesystem>
 #include <cstdlib>
 #include "ShadowRenderTarget.h"
+#include "GRenderTarget.h"
 #include "DepthShader.h"
 #include "DirectionalLight.h"
 #include "ScreenQuad.h"
@@ -193,6 +194,12 @@ void Game::Draw() {
 	RootComponent->DrawChildren(true);
 
 	//Render To Screen
+
+	pGRenderTarget->ClearRenderTarget(0.1, 0.1, 0.1, 0.1);
+	pGRenderTarget->SetRenderTarget();
+	RootComponent->DrawChildren(false);
+
+	//Render Quad
 	DeviceContext->RSSetViewports(1, &viewport);
 
 	float color[] = { 0.1f, 0.1f, 0.1f, 1.0f };
@@ -219,6 +226,7 @@ void Game::CreateBackBuffer() {
 	{
 		OutputDebugStringW(L"CreateRenderTargetView! Oh, that was unexpected!");
 	}
+
 }
 
 void Game::CreateDepthStencilBuffer()
@@ -303,6 +311,9 @@ bool Game::CreateShadowsRT()
 		return false;
 	pDepthShader = new DepthShader(this);
 	if (!pDepthShader->Init())
+		return false;
+	pGRenderTarget = new GRenderTarget(this);
+	if (!pGRenderTarget->Init())
 		return false;
 }
 
