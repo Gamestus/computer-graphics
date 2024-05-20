@@ -23,6 +23,7 @@ class Camera;
 class ShadowRenderTarget;
 class DirectionalLight;
 class DepthShader;
+class ScreenQuad;
 
 class Game
 {
@@ -42,6 +43,8 @@ public:
 	DirectionalLight* pLight;
 	ShadowRenderTarget* pRenderTexture;
 	DepthShader* pDepthShader;
+
+	ScreenQuad* pQuad;
 
 	Camera* CurrCam;
 	PhysicsServer* PhysServer;

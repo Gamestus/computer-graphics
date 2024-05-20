@@ -14,6 +14,7 @@
 #include "ShadowRenderTarget.h"
 #include "DepthShader.h"
 #include "DirectionalLight.h"
+#include "ScreenQuad.h"
 
 namespace fs = std::filesystem;
 
@@ -84,6 +85,8 @@ void Game::Initialize(HINSTANCE hInstanceNew) {
 	CreateShadowsRT();
 	UpdateViewport();
 
+
+	pQuad = new ScreenQuad();
 	RootComponent = new GameComponent();
 
 
@@ -198,7 +201,9 @@ void Game::Draw() {
 
 	DeviceContext->OMSetRenderTargets(1, &RenderView, DSView);
 
-	RootComponent->DrawChildren(false);
+	//RootComponent->DrawChildren(false);
+	pQuad->Draw(false);
+
 
 	SwapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0);
 }

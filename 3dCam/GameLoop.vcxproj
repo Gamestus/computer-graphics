@@ -159,6 +159,7 @@
     <ClInclude Include="Planet.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Rotator.h" />
+    <ClInclude Include="ScreenQuad.h" />
     <ClInclude Include="ShadowRenderTarget.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Vertex.h" />
@@ -183,6 +184,7 @@
     <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="Planet.cpp" />
     <ClCompile Include="Rotator.cpp" />
+    <ClCompile Include="ScreenQuad.cpp" />
     <ClCompile Include="ShadowRenderTarget.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
